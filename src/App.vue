@@ -1,23 +1,25 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
+    <Header></Header>
     <router-view/>
+    <!-- 部分路由不应该包含这个Footer -->
+    <Footer v-if="excludeRoutes.indexOf($route.name) == -1"></Footer>
   </div>
 </template>
 
 <script>
+import Header from '@/components/header/Header';
+import Footer from '@/components/footer/Footer';
 export default {
-  name: 'App'
-}
+  name: 'App',
+  data () {
+    return {
+      excludeRoutes: ['HomeIndex', 'MyAddress', 'AddAddress', 'MyOrder', 'MyShoppingCart']
+    };
+  },
+  components: {
+    Header,
+    Footer
+  }
+};
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
