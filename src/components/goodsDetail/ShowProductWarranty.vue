@@ -47,7 +47,7 @@
 <script>
 export default {
   name: 'ShowProductWarranty'
-};
+}
 </script>
 
 <style scoped>
@@ -58,28 +58,28 @@ export default {
   font-weight: bolder;
   line-height: 36px;
   color: #666666;
-  background-color: #F7F7F7;
+  background-color: #F7F7F7
 }
 .item-protect-container {
-  padding: 15px;
+  padding: 15px
 }
 .item-protect-box {
-  margin-bottom: 30px;
+  margin-bottom: 30px
 }
 .item-protect-title-box {
   display: flex;
-  align-items: center;
+  align-items: center
 }
 .item-protect-title {
   padding-left: 15px;
   font-size: 20px;
   font-weight: bolder;
-  color: #e4393c;
+  color: #e4393c
 }
 .item-protect-detail {
   padding-top: 5px;
   padding-left: 46px;
   font-size: 14px;
-  color: #999;
+  color: #999
 }
 </style>

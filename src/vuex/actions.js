@@ -32,21 +32,21 @@ export const loadSeckillsInfo = ({ commit }) => {
         price: 559.9,
         realPrice: 759.9
       }
-    ];
-    const date = new Date();
-    const hours = date.getHours();
-    const minute = date.getMinutes();
-    const seconds = date.getSeconds();
-    console.log([hours, minute, seconds]);
+    ]
+    const date = new Date()
+    const hours = date.getHours()
+    const minute = date.getMinutes()
+    const seconds = date.getSeconds()
+    console.log([hours, minute, seconds])
     // 距离开始秒杀时间
     const deadline = {
       hours: 1,
       minute: 38,
       seconds: 36
-    };
-    commit('SET_SECKILLS_INFO', [data, deadline]);
-  });
-};
+    }
+    commit('SET_SECKILLS_INFO', [data, deadline])
+  })
+}
 
 // 获取轮播(营销)图片
 export const loadCarouselItems = ({ commit }) => {
@@ -63,10 +63,10 @@ export const loadCarouselItems = ({ commit }) => {
         'static/img/nav/nav_showimg1.jpg',
         'static/img/nav/nav_showimg2.jpg'
       ]
-    };
-    commit('SET_CAROUSELITEMS_INFO', data);
-  });
-};
+    }
+    commit('SET_CAROUSELITEMS_INFO', data)
+  })
+}
 
 // 加载电脑专栏数据
 export const loadComputer = ({ commit }) => {
@@ -136,10 +136,10 @@ export const loadComputer = ({ commit }) => {
           ]
         }
       ]
-    };
-    commit('SET_COMPUTER_INFO', computer);
-  });
-};
+    }
+    commit('SET_COMPUTER_INFO', computer)
+  })
+}
 
 // 加载爱吃专栏数据
 export const loadEat = ({ commit }) => {
@@ -209,14 +209,14 @@ export const loadEat = ({ commit }) => {
           ]
         }
       ]
-    };
-    commit('SET_EAT_INFO', eat);
-  });
-};
+    }
+    commit('SET_EAT_INFO', eat)
+  })
+}
 
 // 请求获得商品详细信息
 export const loadGoodsInfo = ({ commit }) => {
-  commit('SET_LOAD_STATUS', true);
+  commit('SET_LOAD_STATUS', true)
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       const data = {
@@ -409,16 +409,16 @@ export const loadGoodsInfo = ({ commit }) => {
             }
           ]
         }
-      };
-      commit('SET_GOODS_INFO', data);
-      commit('SET_LOAD_STATUS', false);
-    }, 300);
-  });
-};
+      }
+      commit('SET_GOODS_INFO', data)
+      commit('SET_LOAD_STATUS', false)
+    }, 300)
+  })
+}
 
 // 获取商品列表
 export const loadGoodsList = ({ commit }) => {
-  commit('SET_LOAD_STATUS', true);
+  commit('SET_LOAD_STATUS', true)
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       const data = {
@@ -596,19 +596,19 @@ export const loadGoodsList = ({ commit }) => {
             sale: 3560
           }
         ]
-      };
-      commit('SET_GOODS_LIST', data);
-      commit('SET_LOAD_STATUS', false);
-    });
-  });
-};
+      }
+      commit('SET_GOODS_LIST', data)
+      commit('SET_LOAD_STATUS', false)
+    })
+  })
+}
 
 // 添加购物车
 export const addShoppingCart = ({ commit }, data) => {
   return new Promise((resolve, reject) => {
-    commit('ADD_SHOPPING_CART', data);
-  });
-};
+    commit('ADD_SHOPPING_CART', data)
+  })
+}
 
 // 获取用户推荐
 export const loadRecommend = ({ commit }) => {
@@ -658,10 +658,10 @@ export const loadRecommend = ({ commit }) => {
           price: 15.00
         }
       ]
-    ];
-    commit('SET_RECOMMEND_INFO', data);
-  });
-};
+    ]
+    commit('SET_RECOMMEND_INFO', data)
+  })
+}
 
 export const loadAddress = ({ commit }) => {
   return new Promise((resolve, reject) => {
@@ -686,10 +686,10 @@ export const loadAddress = ({ commit }) => {
         phone: '158****0888',
         postalcode: '200120'
       }
-    ];
-    commit('SET_USER_ADDRESS', address);
-  });
-};
+    ]
+    commit('SET_USER_ADDRESS', address)
+  })
+}
 
 export const loadShoppingCart = ({ commit }) => {
   return new Promise((resolve, reject) => {
@@ -700,61 +700,61 @@ export const loadShoppingCart = ({ commit }) => {
       package: '4.7英寸-深邃蓝',
       price: 28,
       title: '苹果8/7手机壳iPhone7 Plus保护壳全包防摔磨砂硬外壳'
-    }];
-    commit('SET_SHOPPING_CART', data);
-  });
-};
+    }]
+    commit('SET_SHOPPING_CART', data)
+  })
+}
 
 // 添加注册用户
 export const addSignUpUser = ({ commit }, data) => {
   return new Promise((resolve, reject) => {
-    const userArr = localStorage.getItem('users');
-    let users = [];
+    const userArr = localStorage.getItem('users')
+    let users = []
     if (userArr) {
-      users = JSON.parse(userArr);
+      users = JSON.parse(userArr)
     }
-    users.push(data);
-    localStorage.setItem('users', JSON.stringify(users));
-  });
-};
+    users.push(data)
+    localStorage.setItem('users', JSON.stringify(users))
+  })
+}
 
 // 用户登录
 export const login = ({ commit }, data) => {
   return new Promise((resolve, reject) => {
     if (data.username === 'Gavin' && data.password === '123456') {
-      localStorage.setItem('loginInfo', JSON.stringify(data));
-      commit('SET_USER_LOGIN_INFO', data);
-      resolve(true);
-      return true;
+      localStorage.setItem('loginInfo', JSON.stringify(data))
+      commit('SET_USER_LOGIN_INFO', data)
+      resolve(true)
+      return true
     }
-    const userArr = localStorage.getItem('users');
-    console.log(userArr);
+    const userArr = localStorage.getItem('users')
+    console.log(userArr)
     if (userArr) {
-      const users = JSON.parse(userArr);
+      const users = JSON.parse(userArr)
       for (const item of users) {
         if (item.username === data.username) {
-          localStorage.setItem('loginInfo', JSON.stringify(item));
-          commit('SET_USER_LOGIN_INFO', item);
-          resolve(true);
-          break;
+          localStorage.setItem('loginInfo', JSON.stringify(item))
+          commit('SET_USER_LOGIN_INFO', item)
+          resolve(true)
+          break
         }
       }
     } else {
-      resolve(false);
+      resolve(false)
     }
-  });
-};
+  })
+}
 
 // 退出登陆
 export const signOut = ({ commit }) => {
-  localStorage.removeItem('loginInfo');
-  commit('SET_USER_LOGIN_INFO', {});
-};
+  localStorage.removeItem('loginInfo')
+  commit('SET_USER_LOGIN_INFO', {})
+}
 
 // 判断是否登陆
 export const isLogin = ({ commit }) => {
-  const user = localStorage.getItem('loginInfo');
+  const user = localStorage.getItem('loginInfo')
   if (user) {
-    commit('SET_USER_LOGIN_INFO', JSON.parse(user));
+    commit('SET_USER_LOGIN_INFO', JSON.parse(user))
   }
-};
+}

@@ -64,18 +64,18 @@
 </template>
 
 <script>
-import Search from '@/components/Search';
-import GoodsListNav from '@/components/nav/GoodsListNav';
-import store from '@/vuex/store';
-import { mapState, mapActions } from 'vuex';
+import Search from '@/components/Search'
+import GoodsListNav from '@/components/nav/GoodsListNav'
+import store from '@/vuex/store'
+import { mapState, mapActions } from 'vuex'
 export default {
   name: 'ShoppingCart',
   beforeRouteEnter (to, from, next) {
-    window.scrollTo(0, 0);
-    next();
+    window.scrollTo(0, 0)
+    next()
   },
   created () {
-    this.loadRecommend();
+    this.loadRecommend()
   },
   computed: {
     ...mapState(['newShoppingCart', 'recommend'])
@@ -88,14 +88,14 @@ export default {
     GoodsListNav
   },
   store
-};
+}
 </script>
 
 <style scoped>
 /****************************加入购物车页面开始*****************************/
 .add-info-box-container{
   width: 100%;
-  background-color: #F5F5F5;
+  background-color: #F5F5F5
 }
 .add-info-box{
   width: 90%;
@@ -103,42 +103,42 @@ export default {
   padding: 15px 0px;
   display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-between
 }
 .add-info-detail{
   display: flex;
-    flex-direction: column;
+    flex-direction: column
 }
 .add-info-title{
   font-size: 25px;
-  color: #71b247;
+  color: #71b247
 }
 .add-info-box-row{
   display: flex;
     flex-direction: row;
-    margin-top: 15px;
+    margin-top: 15px
 }
 .add-info-img{
   width: 56px;
   height: 56px;
-  margin-right: 15px;
+  margin-right: 15px
 }
 .add-info-img img{
-  width: 100%;
+  width: 100%
 }
 .add-info-intro{
   display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: center
 }
 .add-info-intro-detail{
   font-size: 12px;
-  color: #999999;
+  color: #999999
 }
 .car-btn-group{
   display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-between
 }
 /*按钮*/
 .btn-car{
@@ -146,72 +146,72 @@ export default {
   font-size: 16px;
   border-radius: 0px;
   border:none;
-  margin-right: 15px;
+  margin-right: 15px
 }
 .btn-car-to-detail{
   background-color: #fff;
   color: #e4393c;
-  border:1px solid #fff;
+  border:1px solid #fff
 }
 .btn-car-to-detail:hover{
-border:1px solid #e4393c;
+border:1px solid #e4393c
 }
 .btn-car-to-pay{
   background-color: #e4393c;
   color: #fff;
-  border:1px solid #e4393c;
+  border:1px solid #e4393c
 }
 .btn-car-to-pay:hover{
   background-color: #c91623;
-  border:1px solid #c91623;
+  border:1px solid #c91623
 }
 /*其他用户购买*/
 .other-user-buy-box{
   width: 90%;
   margin: 0px auto;
   display: flex;
-    flex-direction: column;
+    flex-direction: column
 }
 .other-user-buy-title{
   margin-top: 25px;
   font-size: 14px;
   color: #666;
-  font-weight: bold;
+  font-weight: bold
 }
 .other-user-buy-row{
   margin-top: 25px;
   display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-between
 }
 .other-user-buy-item-box{
   display: flex;
-    flex-direction: row;
+    flex-direction: row
 }
 .other-user-buy-item-img{
   width: 96px;
-  height: 96px;
+  height: 96px
 }
 .other-user-buy-item-img img{
-  width: 100%;
+  width: 100%
 }
 .other-buy-detail-box{
   width: 160px;
   margin-left: 15px;
   display: flex;
-    flex-direction: column;
+    flex-direction: column
 }
 .other-buy-title{
-  font-size: 12px;
+  font-size: 12px
 }
 .other-buy-title a{
   color: #2c2c2c;
-  text-decoration: none;
+  text-decoration: none
 }
 .other-buy-price{
   font-size: 12px;
   font-weight: bold;
-  color: #E4393C;
+  color: #E4393C
 }
 .other-buy-btn{
   padding: 3px 10px;
@@ -219,11 +219,11 @@ border:1px solid #e4393c;
   font-size: 12px;
   border: 1px solid #E4393C;
   border-radius: 0px;
-  background-color: #fff;
+  background-color: #fff
 }
 .other-buy-btn:hover{
   color: #c91623;
-  border: 1px solid #c91623;
+  border: 1px solid #c91623
 }
 /****************************加入购物车页面结束*****************************/
 </style>

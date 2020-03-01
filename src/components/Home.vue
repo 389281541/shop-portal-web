@@ -9,27 +9,27 @@
             </div>
             <p>Gavin</p>
           </div>
-          <Submenu name="1">
+          <sub-menu name="1">
             <template slot="title">
                 <Icon type="location"></Icon>
                 <span>收货地址</span>
             </template>
-            <MenuItem name="myAddress">我的收货地址</MenuItem>
-            <MenuItem name="addAddress">添加收货地址</MenuItem>
-          </Submenu>
+            <menu-item name="myAddress">我的收货地址</menu-item>
+            <menu-item name="addAddress">添加收货地址</menu-item>
+          </sub-menu>
           <Submenu name="2">
             <template slot="title">
                 <Icon type="clipboard"></Icon>
                 <span>购物订单</span>
             </template>
-            <MenuItem name="myOrder">我的订单</MenuItem>
+            <menu-item name="myOrder">我的订单</menu-item>
           </Submenu>
           <Submenu name="3">
             <template slot="title">
                 <Icon type="ios-cart"></Icon>
                 <span>购物车</span>
             </template>
-            <MenuItem name="myShoppingCart">我的购物车</MenuItem>
+            <menu-item name="myShoppingCart">我的购物车</menu-item>
           </Submenu>
         </Menu>
       </Sider>
@@ -37,11 +37,11 @@
         <Header :style="{background: '#fff'}">
           <h2>{{activeTitle}}</h2>
         </Header>
-        <Content class="content">
+        <content class="content">
           <transition mode="out-in">
             <router-view></router-view>
           </transition>
-        </Content>
+        </content>
         <Footer class="layout-footer-center">2018 &copy; Gavin</Footer>
       </Layout>
     </Layout>
@@ -60,7 +60,7 @@ export default {
         'myOrder': '我的订单',
         'myShoppingCart': '我的购物车'
       }
-    };
+    }
   },
   methods: {
     onSelect (name) {
@@ -72,37 +72,37 @@ export default {
 </script>
 
 <style scoped>
-.side-bar a{
-  color: #232323;
+.side-bar a {
+  color: #232323
 }
 .user-icon {
   height: 200px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: center
 }
 .user-icon span {
-  font-size: 96px;
+  font-size: 96px
 }
 .user-img {
   margin-bottom: 15px;
   width: 96px;
   height: 96px;
   border-radius: 48px;
-  overflow: hidden;
+  overflow: hidden
 }
 .user-img img{
-  width: 100%;
+  width: 100%
 }
 .content {
   margin: 15px;
   background-color: #fff;
-  padding: 15px;
+  padding: 15px
 }
 .layout-footer-center {
   padding: 0px 15px;
   padding-bottom: 15px;
-  text-align: center;
+  text-align: center
 }
 </style>

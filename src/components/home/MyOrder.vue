@@ -40,7 +40,7 @@ export default {
                   src: params.row.img
                 }
               })
-            ]);
+            ])
           },
           align: 'center'
         },
@@ -74,9 +74,9 @@ export default {
           align: 'center'
         }
       ]
-    };
+    }
   }
-};
+}
 </script>
 
 <style scoped>
@@ -84,6 +84,6 @@ export default {
   margin: 15px 0px;
   display: flex;
   justify-content: flex-end;
-  align-items: center;
+  align-items: center
 }
 </style>

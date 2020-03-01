@@ -96,12 +96,12 @@
 </template>
 
 <script>
-import store from '@/vuex/store';
-import { mapState, mapActions } from 'vuex';
+import store from '@/vuex/store'
+import { mapState, mapActions } from 'vuex'
 export default {
   name: 'M-Header',
   created () {
-    this.isLogin();
+    this.isLogin()
   },
   data () {
     return {
@@ -112,7 +112,7 @@ export default {
         ['江西', '四川', '海南', '贵州', '云南'],
         ['西藏', '陕西', '甘肃', '青海', '珠海']
       ]
-    };
+    }
   },
   computed: {
     ...mapState(['userInfo', 'shoppingCart'])
@@ -120,92 +120,92 @@ export default {
   methods: {
     ...mapActions(['signOut', 'isLogin']),
     changeCity (city) {
-      this.city = city;
+      this.city = city
     },
     goToPay () {
-      this.$router.push('/order');
+      this.$router.push('/order')
     },
     myInfo () {
-      this.$router.push('/home');
+      this.$router.push('/home')
     },
     signOutFun () {
-      this.signOut();
-      this.$router.push('/');
+      this.signOut()
+      this.$router.push('/')
     }
   },
   store
-};
+}
 </script>
 
 <style scoped>
 .box {
   width: 100%;
   height: 35px;
-  background-color: #e3e4e5;
+  background-color: #e3e4e5
 }
 .nav {
   margin: 0% auto;
   width: 90%;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-between
 }
 .nav ul {
-  list-style: none;
+  list-style: none
 }
 .nav li {
   float: left;
   font-size: 14px;
   line-height: 35px;
   margin-right: 15px;
-  font-weight: bold;
+  font-weight: bold
 }
 .nav a {
   text-decoration: none;
   color: #999999;
   padding-left: 15px;
   border-left: 1px solid #ccc;
-  cursor: pointer;
+  cursor: pointer
 }
 .location a {
-  border-left: none;
+  border-left: none
 }
 .nav a:hover {
-  color: #d9534f;
+  color: #d9534f
 }
 .location {
-  color: #999999;
+  color: #999999
 }
 .icon {
-  color: #d9534f;
+  color: #d9534f
 }
 .first {
-  color: #999999;
+  color: #999999
 }
 .first a:first-child {
   padding-left: 3px;
-  border-left: none;
+  border-left: none
 }
 .city {
-  padding: 10px 15px;
+  padding: 10px 15px
 }
 .city-item {
   font-weight: bold;
   cursor: pointer;
-  padding: 5px;
+  padding: 5px
 }
 .city-item:hover {
-  color: #d9534f;
+  color: #d9534f
 }
 .person-icon {
   color: #d9534f;
-  background-color:  #f0cdb2;
+  background-color:  #f0cdb2
 }
 .username {
-  color: #999999;
+  color: #999999
 }
 .shopping-cart-list {
-  padding: 3px 15px;
+  padding: 3px 15px
 }
 .shopping-cart-box {
   margin: 8px 0px;
@@ -214,18 +214,18 @@ export default {
   height: 40px;
   display: flex;
   align-items: center;
-  border-bottom: 1px #ccc dotted;
+  border-bottom: 1px #ccc dotted
 }
 .shopping-cart-box:first-child {
-  margin-top: 8px;
+  margin-top: 8px
 }
 .shopping-cart-img {
   margin-right: 15px;
   width: 40px;
-  height: 40px;
+  height: 40px
 }
 .shopping-cart-img img {
-  width: 100%;
+  width: 100%
 }
 .shopping-cart-info {
   display: flex;
@@ -236,36 +236,36 @@ export default {
   overflow: hidden;
   font-size: 12px;
   line-height: 20px;
-  color: #999999;
+  color: #999999
 }
 .shopping-cart-detail {
-  color: #999999;
+  color: #999999
 }
 .shopping-cart-text {
-  color: #ccc;
+  color: #ccc
 }
 .go-to-buy {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-end
 }
 .shopping-cart-null {
   padding: 15px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: center
 }
 .cart-null-icon {
   font-size: 38px;
-  margin-bottom: 15px;
+  margin-bottom: 15px
 }
 .shopping-cart-null span {
   color: #999999;
   font-size: 12px;
-  line-height: 16px;
+  line-height: 16px
 }
 .username-p {
-  cursor: pointer;
+  cursor: pointer
 }
 .my-page {
   padding: 3px 5px;
@@ -273,43 +273,43 @@ export default {
   height: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center
 }
 .my-page a {
   margin: 0px;
   padding: 0px;
-  border: none;
+  border: none
 }
 .my-info {
   padding: 5px;
   width: 50%;
   height: 100%;
   text-align: center;
-  cursor: pointer;
+  cursor: pointer
 }
 .my-info:hover {
-  box-shadow: 0px 0px 5px #ccc;
+  box-shadow: 0px 0px 5px #ccc
 }
 .my-info i {
-  font-size: 28px;
+  font-size: 28px
 }
 .my-info p {
-  font-size: 12px;
+  font-size: 12px
 }
 .sign-out {
   padding: 5px;
   width: 50%;
   height: 100%;
   text-align: center;
-  cursor: pointer;
+  cursor: pointer
 }
 .sign-out:hover {
-  box-shadow: 0px 0px 5px #ccc;
+  box-shadow: 0px 0px 5px #ccc
 }
 .sign-out i {
-  font-size: 28px;
+  font-size: 28px
 }
 .sign-out p {
-  font-size: 12px;
+  font-size: 12px
 }
 </style>

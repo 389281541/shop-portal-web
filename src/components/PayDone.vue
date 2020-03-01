@@ -9,7 +9,7 @@
 <script>
 export default {
   name: 'PayDone'
-};
+}
 </script>
 
 <style scoped>
@@ -18,6 +18,6 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: center
 }
 </style>

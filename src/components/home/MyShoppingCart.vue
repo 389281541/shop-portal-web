@@ -8,8 +8,8 @@
 </template>
 
 <script>
-import store from '@/vuex/store';
-import { mapState, mapActions } from 'vuex';
+import store from '@/vuex/store'
+import { mapState, mapActions } from 'vuex'
 export default {
   name: 'MyShoppingCart',
   data () {
@@ -31,7 +31,7 @@ export default {
                   src: params.row.img
                 }
               })
-            ]);
+            ])
           },
           align: 'center'
         },
@@ -59,10 +59,10 @@ export default {
           align: 'center'
         }
       ]
-    };
+    }
   },
   created () {
-    this.loadShoppingCart();
+    this.loadShoppingCart()
   },
   computed: {
     ...mapState(['shoppingCart'])
@@ -70,17 +70,17 @@ export default {
   methods: {
     ...mapActions(['loadShoppingCart']),
     goTo () {
-      this.$router.push('/order');
+      this.$router.push('/order')
     }
   },
   store
-};
+}
 </script>
 
 <style scoped>
 .go-to {
   margin: 15px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-end
 }
 </style>

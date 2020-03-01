@@ -73,18 +73,18 @@ export default {
   width: 100%;
   height: 390px;
   margin-top: 30px;
-  background-color: #eaeaea;
+  background-color: #eaeaea
 }
 .icon-row {
   margin: 15px auto;
   padding-top: 8px;
   width: 1000px;
-  height: 64px;
+  height: 64px
 }
 .footer-icon {
   margin-left: 17px;
   margin-right: 17px;
-  float: left;
+  float: left
 }
 .footer-icon-child {
   margin-top: 10px;
@@ -93,27 +93,27 @@ export default {
   width: 36px;
   height: 42px;
   background-image: url("../../../static/img/footer/ico_service.png");
-  text-indent: -999px;
+  text-indent: -999px
 }
 .footer-icon-child-2 {
-  background-position: 0 -43px;
+  background-position: 0 -43px
 }
 .footer-icon-child-3 {
-  background-position: 0 -86px;
+  background-position: 0 -86px
 }
 .footer-icon-child-4 {
-  background-position: 0 -129px;
+  background-position: 0 -129px
 }
 .footer-icon-text {
   margin-left: 45px;
   color: #444444;
   font-size: 18px;
   font-weight: bold;
-  line-height: 64px;
+  line-height: 64px
 }
 .service-intro {
   width: 100%;
-  border-top: 1px solid #b2dfdb;
+  border-top: 1px solid #b2dfdb
 }
 .servece-type {
   margin: 15px auto;
@@ -121,23 +121,23 @@ export default {
   width: 800px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-between
 }
 .servece-type-info {
-  color: #666666;
+  color: #666666
 }
 .servece-type-info ul {
-  list-style: none;
+  list-style: none
 }
 .servece-type-info li {
   font-size: 14px;
   cursor: pointer;
-  line-height: 26px;
+  line-height: 26px
 }
 .servece-type-info li:first-child {
   font-size: 16px;
   line-height: 28px;
-  font-weight: bold;
+  font-weight: bold
 }
 .friend-link {
   display: flex;
@@ -146,35 +146,35 @@ export default {
   height: 30px;
   margin: 0px auto;
   color: #666;
-  border-top: 1px solid #b2dfdb;
+  border-top: 1px solid #b2dfdb
 }
 .friend-link-item {
-  margin: 0px auto;
+  margin: 0px auto
 }
 .friend-link-item ul {
-  list-style: none;
+  list-style: none
 }
 .friend-link-item li {
   padding: 5px 0px;
-  float: left;
+  float: left
 }
 .link-item {
   padding: 0px 8px;
   cursor: pointer;
-  border-right: 1px solid #ccc;
+  border-right: 1px solid #ccc
 }
 .link-last-item {
-  border: none;
+  border: none
 }
 .copyright {
   width: 100%;
   color: #666;
   line-height: 30px;
-  text-align: center;
+  text-align: center
 }
 .copyright a{
   color: #232323;
-  font-size: 20px;
+  font-size: 20px
 }
 /*****************************底 部 结 束*****************************/
 </style>

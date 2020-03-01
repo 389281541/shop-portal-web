@@ -39,39 +39,39 @@ export default {
           tags: [ '塑料/PC', '硅胶', '金属', '电镀', '真皮', '树脂', '木质', '镶钻', '液态硅胶', 'TPU' ]
         }
       ]
-    };
+    }
   }
-};
+}
 </script>
 
 <style scoped>
 .item-class-show {
   margin: 15px auto;
-  width: 100%;
+  width: 100%
 }
 .item-class-group {
   margin-top: 1px;
   height: 45px;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #ccc
 }
 .item-class-group:first-child {
-  border-top: 1px solid #ccc;
+  border-top: 1px solid #ccc
 }
 .item-class-name {
   padding-left: 15px;
   line-height: 44px;
   color: #666;
   font-weight: bold;
-  background-color: #f3f3f3;
+  background-color: #f3f3f3
 }
 .item-class-name:first-child {
-  line-height: 43px;
+  line-height: 43px
 }
 .item-class-select span {
   margin-left: 15px;
   width: 160px;
   color: #005aa0;
   line-height: 45px;
-  cursor: pointer;
+  cursor: pointer
 }
 </style>

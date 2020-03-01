@@ -41,9 +41,9 @@ export default {
         title: '',
         content: ''
       }
-    };
+    }
   }
-};
+}
 </script>
 
 <style scoped>
@@ -52,33 +52,33 @@ export default {
   width: 80%;
   height: 600px;
   display: flex;
-  align-items: center;
-  /* background-color: #ccc; */
+  align-items: center
+  /* background-color: #ccc */
 }
 .freeback-img-box {
   width: 50%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center
 }
 .freeback-img-box img {
-  width: 80%;
+  width: 80%
 }
 .freeback-box-border {
   width: 50%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center
 }
 .freeback-box {
-  width: 480px;
+  width: 480px
 }
 .freeback-content {
   margin: 15px auto;
-  border: 1px #ccc dotted;
+  border: 1px #ccc dotted
 }
 .freeback-form {
   margin: 30px auto;
-  width: 90%;
+  width: 90%
 }
 </style>

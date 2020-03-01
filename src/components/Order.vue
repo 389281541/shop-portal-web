@@ -55,18 +55,18 @@
 </template>
 
 <script>
-import Search from '@/components/Search';
-import GoodsListNav from '@/components/nav/GoodsListNav';
-import store from '@/vuex/store';
-import { mapState, mapActions } from 'vuex';
+import Search from '@/components/Search'
+import GoodsListNav from '@/components/nav/GoodsListNav'
+import store from '@/vuex/store'
+import { mapState, mapActions } from 'vuex'
 export default {
   name: 'Order',
   beforeRouteEnter (to, from, next) {
-    window.scrollTo(0, 0);
-    next();
+    window.scrollTo(0, 0)
+    next()
   },
   created () {
-    this.loadAddress();
+    this.loadAddress()
   },
   data () {
     return {
@@ -88,7 +88,7 @@ export default {
                   src: params.row.img
                 }
               })
-            ]);
+            ])
           },
           align: 'center'
         },
@@ -121,75 +121,75 @@ export default {
         address: '请选择地址'
       },
       remarks: ''
-    };
+    }
   },
   computed: {
     ...mapState(['address', 'shoppingCart']),
     totalPrice () {
-      let price = 0;
+      let price = 0
       this.goodsCheckList.forEach(item => {
-        price += item.price * item.count;
-      });
-      return price;
+        price += item.price * item.count
+      })
+      return price
     }
   },
   methods: {
     ...mapActions(['loadAddress']),
     select (selection, row) {
-      console.log(selection);
-      this.goodsCheckList = selection;
+      console.log(selection)
+      this.goodsCheckList = selection
     },
     changeAddress (data) {
-      const father = this;
+      const father = this
       this.address.forEach(item => {
         if (item.addressId === data) {
-          father.checkAddress.name = item.name;
-          father.checkAddress.address = `${item.name} ${item.province} ${item.city} ${item.address} ${item.phone} ${item.postalcode}`;
+          father.checkAddress.name = item.name
+          father.checkAddress.address = `${item.name} ${item.province} ${item.city} ${item.address} ${item.phone} ${item.postalcode}`
         }
-      });
+      })
     }
   },
   mounted () {
     setTimeout(() => {
-      this.$refs.selection.selectAll(true);
-    }, 500);
+      this.$refs.selection.selectAll(true)
+    }, 500)
   },
   components: {
     Search,
     GoodsListNav
   },
   store
-};
+}
 </script>
 
 <style scoped>
 .goods-list-container {
   margin: 15px auto;
-  width: 80%;
+  width: 80%
 }
 .tips-box {
-  margin-bottom: 15px;
+  margin-bottom: 15px
 }
 .address-container {
-  margin-top: 15px;
+  margin-top: 15px
 }
 .address-box {
   margin-top: 15px;
   padding: 15px;
-  border: 1px #ccc dotted;
+  border: 1px #ccc dotted
 }
 .address-check {
   margin: 15px 0px;
   height: 36px;
   display: flex;
-  align-items: center;
+  align-items: center
 }
 .address-check-name {
   width: 120px;
   display: flex;
   justify-content: center;
   align-content: center;
-  background-color: #ccc;
+  background-color: #ccc
 }
 .address-check-name span {
   width: 120px;
@@ -198,41 +198,41 @@ export default {
   line-height: 36px;
   text-align: center;
   color: #fff;
-  background-color: #f90013;
+  background-color: #f90013
 }
 .address-detail {
   padding-left: 15px;
   font-size: 14px;
-  color: #999999;
+  color: #999999
 }
 .remarks-container {
-  margin: 15px 0px;
+  margin: 15px 0px
 }
 .remarks-input {
-  margin-top: 15px;
+  margin-top: 15px
 }
 .invoices-container p{
   font-size: 12px;
   line-height: 30px;
-  color: #999;
+  color: #999
 }
 .pay-container {
   margin: 15px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-end
 }
 .pay-box {
   font-size: 18px;
   font-weight: bolder;
-  color: #495060;
+  color: #495060
 }
 .money {
   font-size: 26px;
-  color: #f90013;
+  color: #f90013
 }
 .pay-btn {
   margin: 15px 0px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-end
 }
 </style>

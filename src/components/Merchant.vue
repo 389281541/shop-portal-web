@@ -29,13 +29,13 @@
 </template>
 
 <script>
-import ShopHeader from '@/components/header/ShopHeader';
-import store from '@/vuex/store';
-import { mapGetters, mapActions } from 'vuex';
+import ShopHeader from '@/components/header/ShopHeader'
+import store from '@/vuex/store'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'Merchant',
   created () {
-    this.loadGoodsList();
+    this.loadGoodsList()
   },
   computed: {
     ...mapGetters(['orderGoodsList'])
@@ -47,61 +47,61 @@ export default {
     ShopHeader
   },
   store
-};
+}
 </script>
 
 <style scoped>
 .text-danger {
-  color: #A94442;
+  color: #A94442
 }
 .seckill-price{
   margin-right: 5px;
   font-size: 25px;
-  font-weight: bold;
+  font-weight: bold
 }
 .goods-container {
   margin: 15px auto;
-  width: 80%;
+  width: 80%
 }
 .goods-list {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: space-between
 }
 .goods-show-info{
   width: 240px;
   padding: 10px;
   margin: 15px 0px;
   border: 1px solid #fff;
-  cursor: pointer;
+  cursor: pointer
 }
 .goods-show-info:hover{
   border: 1px solid #ccc;
-  box-shadow: 0px 0px 15px #ccc;
+  box-shadow: 0px 0px 15px #ccc
 }
 .goods-show-price{
-  margin-top: 6px;
+  margin-top: 6px
 }
 .goods-show-detail{
   font-size: 12px;
-  margin: 6px 0px;
+  margin: 6px 0px
 }
 .goods-show-num{
   font-size: 12px;
   margin-bottom: 6px;
-  color: #009688;
+  color: #009688
 }
 .goods-show-num span{
   color: #005AA0;
-  font-weight: bold;
+  font-weight: bold
 }
 .goods-show-seller{
   font-size: 12px;
-  color:#E4393C;
+  color:#E4393C
 }
 .goods-page {
   margin-top: 20px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-end
 }
 </style>

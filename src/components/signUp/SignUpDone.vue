@@ -8,20 +8,20 @@
 <script>
 export default {
   name: 'SignUpDone'
-};
+}
 </script>
 
 <style scoped>
 .container {
   width: 100%;
-  text-align: center;
+  text-align: center
 }
 .container p {
   font-size: 90px;
   color: #2d8cf0;
-  text-align: center;
+  text-align: center
 }
 .btn-success {
-  margin-top: 30px;
+  margin-top: 30px
 }
 </style>

@@ -47,9 +47,9 @@
 </template>
 
 <script>
-import store from '@/vuex/store';
-import { mapState, mapActions } from 'vuex';
-import Distpicker from 'v-distpicker';
+import store from '@/vuex/store'
+import { mapState, mapActions } from 'vuex'
+import Distpicker from 'v-distpicker'
 export default {
   name: 'MyAddress',
   data () {
@@ -79,10 +79,10 @@ export default {
           { type: 'string', pattern: /^1[3|4|5|7|8][0-9]{9}$/, message: '手机号格式出错', trigger: 'blur' }
         ]
       }
-    };
+    }
   },
   created () {
-    this.loadAddress();
+    this.loadAddress()
   },
   computed: {
     ...mapState(['address'])
@@ -90,37 +90,37 @@ export default {
   methods: {
     ...mapActions(['loadAddress']),
     edit (index) {
-      this.modal = true;
-      this.formData.province = this.address[index].province;
-      this.formData.city = this.address[index].city;
-      this.formData.area = this.address[index].area;
-      this.formData.address = this.address[index].address;
-      this.formData.name = this.address[index].name;
-      this.formData.phone = this.address[index].phone;
-      this.formData.postalcode = this.address[index].postalcode;
+      this.modal = true
+      this.formData.province = this.address[index].province
+      this.formData.city = this.address[index].city
+      this.formData.area = this.address[index].area
+      this.formData.address = this.address[index].address
+      this.formData.name = this.address[index].name
+      this.formData.phone = this.address[index].phone
+      this.formData.postalcode = this.address[index].postalcode
     },
     editAction () {
-      this.modal = false;
-      this.$Message.success('修改成功');
+      this.modal = false
+      this.$Message.success('修改成功')
     },
     del (index) {
       this.$Modal.confirm({
         title: '信息提醒',
         content: '你确定删除这个收货地址',
         onOk: () => {
-          this.$Message.success('删除成功');
+          this.$Message.success('删除成功')
         },
         onCancel: () => {
-          this.$Message.info('取消删除');
+          this.$Message.info('取消删除')
         }
-      });
+      })
     }
   },
   components: {
     Distpicker
   },
   store
-};
+}
 </script>
 
 <style scoped>
@@ -128,25 +128,25 @@ export default {
   padding: 15px;
   margin: 15px;
   border-radius: 5px;
-  box-shadow: 0px 0px 5px #ccc;
+  box-shadow: 0px 0px 5px #ccc
 }
 .address-header {
   height: 35px;
   display: flex;
   justify-content: space-between;
   color: #232323;
-  font-size: 18px;
+  font-size: 18px
 }
 .address-content {
-  font-size: 14px;
+  font-size: 14px
 }
 .address-content-title {
-  color: #999;
+  color: #999
 }
 .address-action span{
   margin-left: 15px;
   font-size: 14px;
   color: #2d8cf0;
-  cursor: pointer;
+  cursor: pointer
 }
 </style>

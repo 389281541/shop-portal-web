@@ -34,8 +34,8 @@
 </template>
 
 <script>
-import store from '@/vuex/store';
-import { mapMutations, mapActions } from 'vuex';
+import store from '@/vuex/store'
+import { mapMutations, mapActions } from 'vuex'
 export default {
   name: 'Login',
   data () {
@@ -53,60 +53,60 @@ export default {
           { type: 'string', min: 6, message: '密码不能少于6位', trigger: 'blur' }
         ]
       }
-    };
+    }
   },
   methods: {
     ...mapMutations(['SET_USER_LOGIN_INFO']),
     ...mapActions(['login']),
     handleSubmit (name) {
-      const father = this;
-      console.log(this.formDate.username);
+      const father = this
+      console.log(this.formDate.username)
       this.$refs[name].validate((valid) => {
         if (valid) {
           this.login(father.formDate).then(result => {
             if (result) {
-              this.$Message.success('登录成功');
-              father.$router.push('/');
+              this.$Message.success('登录成功')
+              father.$router.push('/')
             } else {
-              this.$Message.error('用户名或密码错误');
+              this.$Message.error('用户名或密码错误')
             }
-          });
+          })
         } else {
-          this.$Message.error('请填写正确的用户名或密码');
+          this.$Message.error('请填写正确的用户名或密码')
         }
-      });
+      })
     }
   },
   store
-};
+}
 </script>
 
 <style scoped>
 .container {
   margin-top: 30px;
   height: 485px;
-  background-color: #fff;
+  background-color: #fff
 }
 .login-img-box {
   height: 485px;
   overflow: hidden;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center
 }
 .login-img-box>img {
-  width: 68%;
+  width: 68%
 }
 .login-box {
   height: 485px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center
 }
 .login-container {
   width: 80%;
   height: 280px;
-  border: #ED3F14 solid 1px;
+  border: #ED3F14 solid 1px
 }
 .login-header {
   height: 50px;
@@ -115,10 +115,10 @@ export default {
   line-height: 50px;
   letter-spacing: 5px;
   color: #fff;
-  background-color: #ED3F14;
+  background-color: #ED3F14
 }
 .form-box {
   width: 80%;
-  margin: 30px auto;
+  margin: 30px auto
 }
 </style>

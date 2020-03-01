@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import Distpicker from 'v-distpicker';
+import Distpicker from 'v-distpicker'
 export default {
   name: 'AddAddress',
   data () {
@@ -60,37 +60,37 @@ export default {
           { type: 'string', pattern: /^1[3|4|5|7|8][0-9]{9}$/, message: '手机号格式出错', trigger: 'blur' }
         ]
       }
-    };
+    }
   },
   methods: {
     getProvince (data) {
-      this.formData.province = data.value;
+      this.formData.province = data.value
     },
     getCity (data) {
-      this.formData.city = data.value;
+      this.formData.city = data.value
     },
     getArea (data) {
-      this.formData.area = data.value;
+      this.formData.area = data.value
     }
   },
   components: {
     Distpicker
   }
-};
+}
 </script>
 
 <style scoped>
 .add-container {
   margin: 15px auto;
   width: 60%;
-  min-width: 600px;
+  min-width: 600px
 }
 .add-title {
   margin-bottom: 15px;
-  text-align: center;
+  text-align: center
 }
 .add-submit {
   display: flex;
-  justify-content: center;
+  justify-content: center
 }
 </style>
