@@ -5,9 +5,9 @@
         <Menu active-name="1-2" theme="light" width="auto" @on-select="onSelect">
           <div class="user-icon">
             <div class="user-img">
-              <img src="static/img/head.png">
+              <img :src="avatar">
             </div>
-            <p>Gavin</p>
+            <p>{{userInfo.name}}</p>
           </div>
           <sub-menu name="1">
             <template slot="title">
@@ -49,11 +49,14 @@
 </template>
 
 <script>
+import store from '@/vuex/store'
+import { mapState } from 'vuex'
 export default {
   name: 'Home',
   data () {
     return {
       activeTitle: '我的订单',
+      avatar: null,
       bar: {
         'myAddress': '我的收货地址',
         'addAddress': '添加收货地址',
@@ -65,12 +68,16 @@ export default {
   computed: {
     ...mapState(['userInfo'])
   },
+  created () {
+    this.avatar = 'https://image.songshupinpin.com/16075df01ef640a6b0755ab8d90d316f'
+  },
   methods: {
     onSelect (name) {
       this.activeTitle = this.bar[name]
       this.$router.push(`/home/${name}`)
     }
-  }
+  },
+  store
 }
 </script>
 

@@ -24,7 +24,9 @@ export default new Vuex.Store({
       remarks: []
     },
     userInfo: { // 用户信息
-      username: '',
+      id: '',
+      name: '',
+      avartar: '',
       token: ''
     },
     signUpStep: 0, // 登陆步骤

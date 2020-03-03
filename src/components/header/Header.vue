@@ -17,7 +17,7 @@
         <li v-show="!!userInfo.name">
           <Dropdown>
             <p class="username-p">
-              <Avatar class="person-icon" icon="person" size="small" /> <span class="username">{{userInfo.name}} </span>
+              <Avatar class="person-icon" :src="avatar" size="small" /><span class="username">{{userInfo.name}} </span>
             </p>
             <DropdownMenu slot="list">
                 <div class="my-page">
@@ -94,10 +94,12 @@ import { mapState, mapActions } from 'vuex'
 export default {
   name: 'M-Header',
   created () {
+    this.avatar = 'https://image.songshupinpin.com/16075df01ef640a6b0755ab8d90d316f'
     this.isLogin()
   },
   data () {
     return {
+      avatar: null
     }
   },
   computed: {
