@@ -1,14 +1,14 @@
 <template>
   <div class="info-form">
      <Form ref="customerInfo" :model="customerInfo" :rules="ruleValidate" :label-width="80" >
-        <FormItem label="用户名" prop="username">
+        <FormItem label="用户名" prop="userName">
             <i-input v-model="customerInfo.userName" clearable placeholder="请输入你的用户名"></i-input>
         </FormItem>
-        <FormItem label="密码" prop="password">
-            <i-input type="password" v-model="customerInfo.password" clearable placeholder="请输入你的密码"></i-input>
+        <FormItem label="密码" prop="passWord">
+            <i-input type="password" v-model="passWord" clearable placeholder="请输入你的密码"></i-input>
         </FormItem>
-        <FormItem label="确认密码" prop="repassword">
-            <i-input type="password" v-model="customerInfo.repassword" clearable  placeholder="请再次输入你的密码"></i-input>
+        <FormItem label="确认密码" prop="rePassword">
+            <i-input type="password" v-model="rePassword" clearable  placeholder="请再次输入你的密码"></i-input>
         </FormItem>
        <FormItem label="用户头像" prop="avatar">
          <single-upload v-model="customerInfo.avatar"></single-upload>
@@ -21,6 +21,9 @@
          <i-select v-model="customerInfo.identityType" clearable placeholder="请选择证件类型">
            <Option :value="item.id" v-for="item in idTypeList" v-bind:key="item.id">{{item.name}}</Option>
          </i-select>
+       </FormItem>
+       <FormItem label="证件号码" prop="identityNo">
+         <i-input v-model="customerInfo.identityNo" clearable  placeholder="请输入你的证件号码"></i-input>
        </FormItem>
        <FormItem lable="性别" prop="identityType">
          <span slot="label">性别</span>
@@ -36,9 +39,6 @@
            placeholder="请选择日期"
            @on-change="customerInfo.birthday=$event"></DatePicker>
        </FormItem>
-       <FormItem label="证件号码" prop="identityNo">
-         <i-input v-model="customerInfo.identityNo" clearable  placeholder="请输入你的证件号码"></i-input>
-       </FormItem>
        <FormItem label="邮箱" prop="email">
          <i-input v-model="customerInfo.email" clearable  placeholder="请输入你的邮箱"></i-input>
        </FormItem>
@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import store from '@/vuex/store'
+// import store from '@/vuex/store'
 import { mapMutations, mapActions } from 'vuex'
 import SingleUpload from '@/components/Upload/singleUpload'
 import { registerCustomer } from '@/api/customer'
@@ -61,7 +61,7 @@ export default {
     const validatePassCheck = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请再次输入密码'))
-      } else if (value !== this.customerInfo.password) {
+      } else if (value !== this.passWord) {
         callback(new Error('两次输入的密码不一样'))
       } else {
         callback()
@@ -72,7 +72,6 @@ export default {
         avatar: '',
         userName: null,
         password: null,
-        repassword: null,
         email: null,
         identityType: null,
         identityNo: null,
@@ -81,6 +80,8 @@ export default {
         birthday: null,
         mobile: null
       },
+      passWord: null,
+      rePassword: null,
       ruleValidate: {
         userName: [
           { required: true, message: '用户名不能为空', trigger: 'blur' }
@@ -88,8 +89,7 @@ export default {
         email: [
           { type: 'email', message: '邮箱格式错误', trigger: 'blur' }
         ],
-        password: [
-          { required: true, message: '密码不能为空', trigger: 'blur' },
+        passWord: [
           { type: 'string', min: 6, message: '密码长度不能小于6', trigger: 'blur' }
         ],
         repassword: [
@@ -125,19 +125,20 @@ export default {
       const father = this
       this.$refs[name].validate((valid) => {
         if (valid) {
-          let encodePassword = md5(md5(this.customerInfo.password.trim()) + 'abcd1234')
+          let encodePassword = md5(md5(this.passWord.trim()) + 'abcd1234')
           this.customerInfo.password = encodePassword
           registerCustomer(this.customerInfo).then(() => {
             father.SET_SIGN_UP_SETP(2)
             this.$router.push({ path: '/SignUp/signUpDone' })
+          }).catch(() => {
+            this.$Message.error('用戶已注冊')
           })
         } else {
           this.$Message.error('注册失败')
         }
       })
     }
-  },
-  store
+  }
 }
 </script>
 

@@ -8,9 +8,17 @@ export function registerCustomer (data) {
   })
 }
 
-export function login (data) {
+export function loginCustomer (data) {
   return request({
     url: '/customer/login',
+    method: 'post',
+    data: data
+  })
+}
+
+export function logoutCustomer (data) {
+  return request({
+    url: '/customer/logout',
     method: 'post',
     data: data
   })

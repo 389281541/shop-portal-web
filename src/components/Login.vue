@@ -11,14 +11,14 @@
             <p>欢迎登录</p>
           </div>
           <div class="form-box">
-            <Form ref="formInline" :model="formDate" :rules="ruleInline">
+            <Form ref="formInline" :model="loginInfo" :rules="ruleInline">
               <FormItem prop="username">
-                  <i-input type="text" v-model="formDate.username" clearable size="large" placeholder="用户名">
+                  <i-input type="text" v-model="loginInfo.username" clearable size="large" placeholder="用户名">
                       <Icon type="person" slot="prepend"></Icon>
                   </i-input>
               </FormItem>
               <FormItem prop="password">
-                  <i-input type="password" v-model="formDate.password" clearable size="large" placeholder="密码">
+                  <i-input type="password" v-model="loginInfo.password" clearable size="large" placeholder="密码">
                       <Icon type="ios-locked-outline" slot="prepend"> </Icon>
                   </i-input>
               </FormItem>
@@ -35,12 +35,12 @@
 
 <script>
 import store from '@/vuex/store'
-import { mapMutations, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 export default {
   name: 'Login',
   data () {
     return {
-      formDate: {
+      loginInfo: {
         username: '',
         password: ''
       },
@@ -56,14 +56,13 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['SET_USER_LOGIN_INFO']),
     ...mapActions(['login']),
     handleSubmit (name) {
       const father = this
-      console.log(this.formDate.username)
+      console.log(this.loginInfo.username)
       this.$refs[name].validate((valid) => {
         if (valid) {
-          this.login(father.formDate).then(result => {
+          this.login(father.loginInfo).then(result => {
             if (result) {
               this.$Message.success('登录成功')
               father.$router.push('/')

@@ -5,35 +5,28 @@
         <li>
           <Dropdown  placement="bottom-start">
             <a href="javascript:void(0)">
-              <Icon type="ios-location" class="icon"></Icon> {{city}}
+              <Icon type="ios-location" class="icon"></Icon>
             </a>
-            <DropdownMenu slot="list">
-              <div class="city">
-                <p v-for="(items, index) in cityArr" :key="index">
-                  <span v-for="(item, index) in items"  class="city-item" :key="index" @click="changeCity(item)">{{item}}</span>
-                </p>
-              </div>
-            </DropdownMenu>
           </Dropdown>
         </li>
       </ul>
       <ul class="detail">
-        <li class="first" v-show="!userInfo.username">
+        <li class="first" v-show="!userInfo.name">
           你好，请<router-link to="/login">登录 <Icon type="person"></Icon></router-link> |<span class="text-color-red"><router-link to="/SignUp">免费注册 <Icon type="person-add"></Icon></router-link></span>
         </li>
-        <li v-show="!!userInfo.username">
+        <li v-show="!!userInfo.name">
           <Dropdown>
             <p class="username-p">
-              <Avatar class="person-icon" icon="person" size="small" /> <span class="username">{{userInfo.username}} </span>
+              <Avatar class="person-icon" icon="person" size="small" /> <span class="username">{{userInfo.name}} </span>
             </p>
             <DropdownMenu slot="list">
                 <div class="my-page">
                   <div class="my-info" @click="myInfo">
-                    <Icon type="home"></Icon>
+<!--                    <Icon type="home"></Icon>-->
                     <p>我的主页</p>
                   </div>
                   <div class="sign-out" @click="signOutFun">
-                    <Icon type="log-out"></Icon>
+<!--                    <Icon type="log-out"></Icon>-->
                     <p>退出登录</p>
                   </div>
                 </div>
@@ -105,23 +98,13 @@ export default {
   },
   data () {
     return {
-      city: '珠海',
-      cityArr: [
-        ['北京', '上海', '天津', '重庆', '广州'],
-        ['深圳', '河南', '辽宁', '吉林', '江苏'],
-        ['江西', '四川', '海南', '贵州', '云南'],
-        ['西藏', '陕西', '甘肃', '青海', '珠海']
-      ]
     }
   },
   computed: {
     ...mapState(['userInfo', 'shoppingCart'])
   },
   methods: {
-    ...mapActions(['signOut', 'isLogin']),
-    changeCity (city) {
-      this.city = city
-    },
+    ...mapActions(['logout', 'isLogin']),
     goToPay () {
       this.$router.push('/order')
     },
@@ -129,8 +112,9 @@ export default {
       this.$router.push('/home')
     },
     signOutFun () {
-      this.signOut()
-      this.$router.push('/')
+      this.logout().then(response => {
+        this.$router.push('/')
+      })
     }
   },
   store

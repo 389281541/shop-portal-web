@@ -42,7 +42,7 @@
             <router-view></router-view>
           </transition>
         </content>
-        <Footer class="layout-footer-center">2018 &copy; Gavin</Footer>
+        <Footer class="layout-footer-center">2020 &copy; lujinwei</Footer>
       </Layout>
     </Layout>
   </div>
@@ -61,6 +61,9 @@ export default {
         'myShoppingCart': '我的购物车'
       }
     }
+  },
+  computed: {
+    ...mapState(['userInfo'])
   },
   methods: {
     onSelect (name) {

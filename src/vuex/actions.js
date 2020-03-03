@@ -1,3 +1,7 @@
+import md5 from 'js-md5'
+import {loginCustomer, logoutCustomer} from '@/api/customer'
+import {listAdvertise} from '@/api/navigation'
+
 // 获取秒杀数据
 export const loadSeckillsInfo = ({ commit }) => {
   return new Promise((resolve, reject) => {
@@ -50,21 +54,13 @@ export const loadSeckillsInfo = ({ commit }) => {
 
 // 获取轮播(营销)图片
 export const loadCarouselItems = ({ commit }) => {
-  return new Promise((resolve, reject) => {
-    const data = {
-      carouselItems: [
-        'static/img/nav/1.jpg',
-        'static/img/nav/2.jpg',
-        'static/img/nav/3.jpg',
-        'static/img/nav/4.jpg',
-        'static/img/nav/5.jpg'
-      ],
-      activity: [
-        'static/img/nav/nav_showimg1.jpg',
-        'static/img/nav/nav_showimg2.jpg'
-      ]
-    }
-    commit('SET_CAROUSELITEMS_INFO', data)
+  return new Promise(() => {
+    listAdvertise().then(response => {
+      let data = {}
+      data['carouselItems'] = response.data.rotateChartList
+      data['activity'] = response.data.activityList
+      commit('SET_CAROUSELITEMS_INFO', data)
+    })
   })
 }
 
@@ -705,55 +701,35 @@ export const loadShoppingCart = ({ commit }) => {
   })
 }
 
-// 添加注册用户
-export const addSignUpUser = ({ commit }, data) => {
-  return new Promise((resolve, reject) => {
-    const userArr = localStorage.getItem('users')
-    let users = []
-    if (userArr) {
-      users = JSON.parse(userArr)
-    }
-    users.push(data)
-    localStorage.setItem('users', JSON.stringify(users))
-  })
-}
-
 // 用户登录
-export const login = ({ commit }, data) => {
+export const login = ({ commit }, loginForm) => {
   return new Promise((resolve, reject) => {
-    if (data.username === 'Gavin' && data.password === '123456') {
-      localStorage.setItem('loginInfo', JSON.stringify(data))
-      commit('SET_USER_LOGIN_INFO', data)
+    let encodePassword = md5(md5(loginForm.password.trim()) + 'abcd1234')
+    loginCustomer({username: loginForm.username, password: encodePassword}).then(response => {
+      let userInfo = response.data
+      localStorage.setItem('userInfo', JSON.stringify(userInfo))
+      commit('SET_USER_LOGIN_INFO', userInfo)
       resolve(true)
       return true
-    }
-    const userArr = localStorage.getItem('users')
-    console.log(userArr)
-    if (userArr) {
-      const users = JSON.parse(userArr)
-      for (const item of users) {
-        if (item.username === data.username) {
-          localStorage.setItem('loginInfo', JSON.stringify(item))
-          commit('SET_USER_LOGIN_INFO', item)
-          resolve(true)
-          break
-        }
-      }
-    } else {
-      resolve(false)
-    }
+    })
   })
 }
 
 // 退出登陆
-export const signOut = ({ commit }) => {
-  localStorage.removeItem('loginInfo')
-  commit('SET_USER_LOGIN_INFO', {})
+export const logout = ({ commit }) => {
+  return new Promise((resolve, reject) => {
+    logoutCustomer().then(response => {
+      localStorage.removeItem('userInfo')
+      commit('SET_USER_LOGIN_INFO', {})
+      resolve(true)
+      return true
+    })
+  })
 }
 
 // 判断是否登陆
 export const isLogin = ({ commit }) => {
-  const user = localStorage.getItem('loginInfo')
+  const user = localStorage.getItem('userInfo')
   if (user) {
     commit('SET_USER_LOGIN_INFO', JSON.parse(user))
   }

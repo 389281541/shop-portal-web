@@ -24,7 +24,8 @@ export default new Vuex.Store({
       remarks: []
     },
     userInfo: { // 用户信息
-      username: ''
+      username: '',
+      token: ''
     },
     signUpStep: 0, // 登陆步骤
     marketing: { // 营销
@@ -45,7 +46,9 @@ export default new Vuex.Store({
     goodsList: [], // 商品列表
     shoppingCart: [], // 购物车
     newShoppingCart: [], // 刚加入的购物车，作为展示
-    recommend: [] // 推荐购买
+    recommend: [], // 推荐购买
+    rotateChartList: [],
+    activityList: []
   },
   getters,
   actions,
