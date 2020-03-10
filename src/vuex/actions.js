@@ -1,6 +1,7 @@
 import md5 from 'js-md5'
 import {loginCustomer, logoutCustomer} from '@/api/customer'
 import {listAdvertise} from '@/api/navigation'
+import {setToken} from '@/utils/auth'
 
 // 获取秒杀数据
 export const loadSeckillsInfo = ({ commit }) => {
@@ -223,7 +224,7 @@ export const loadGoodsInfo = ({ commit }) => {
           'static/img/goodsDetail/item-detail-4.jpg'
         ],
         title: '苹果8/7手机壳iPhone7 Plus保护壳全包防摔磨砂硬外壳',
-        tags: ['满69-20元', '关注产品★送钢化膜', 'BIT配次日达'],
+        tags: ['满69-20元', '关注产品★送钢化膜', 'RAINBOW配次日达'],
         discount: ['满148减10', '满218减20', '满288减30'],
         promotion: ['跨店满减', '多买优惠'],
         remarksNum: 6000,
@@ -659,33 +660,33 @@ export const loadRecommend = ({ commit }) => {
   })
 }
 
-export const loadAddress = ({ commit }) => {
-  return new Promise((resolve, reject) => {
-    const address = [
-      {
-        addressId: '123456',
-        name: 'Gavin',
-        province: '广东省',
-        city: '广州市',
-        area: '天河区',
-        address: '燕岭路633号',
-        phone: '152****0609',
-        postalcode: '510000'
-      },
-      {
-        addressId: '123458',
-        name: 'Kevin',
-        province: '上海市',
-        city: '上海市',
-        area: '浦东新区',
-        address: '沙新镇',
-        phone: '158****0888',
-        postalcode: '200120'
-      }
-    ]
-    commit('SET_USER_ADDRESS', address)
-  })
-}
+// export const loadAddress = ({ commit }) => {
+//   return new Promise((resolve, reject) => {
+//     const address = [
+//       {
+//         addressId: '123456',
+//         name: 'Gavin',
+//         province: '广东省',
+//         city: '广州市',
+//         area: '天河区',
+//         address: '燕岭路633号',
+//         phone: '152****0609',
+//         postalcode: '510000'
+//       },
+//       {
+//         addressId: '123458',
+//         name: 'Kevin',
+//         province: '上海市',
+//         city: '上海市',
+//         area: '浦东新区',
+//         address: '沙新镇',
+//         phone: '158****0888',
+//         postalcode: '200120'
+//       }
+//     ]
+//     commit('SET_USER_ADDRESS', address)
+//   })
+// }
 
 export const loadShoppingCart = ({ commit }) => {
   return new Promise((resolve, reject) => {
@@ -709,6 +710,7 @@ export const login = ({ commit }, loginForm) => {
       let userInfo = response.data
       localStorage.setItem('userInfo', JSON.stringify(userInfo))
       commit('SET_USER_LOGIN_INFO', userInfo)
+      setToken(userInfo.token)
       resolve(true)
       return true
     })

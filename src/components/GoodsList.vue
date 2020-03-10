@@ -5,16 +5,16 @@
     <div class="container">
       <div class="bread-crumb">
         <Breadcrumb>
-          <BreadcrumbItem to="/">
-            <Icon type="ios-home-outline"></Icon> 首页
+          <BreadcrumbItem to="/goodsList">
+            <Icon type="ios-home-outline"></Icon> 全部商品
           </BreadcrumbItem>
-          <BreadcrumbItem to="/goodsList?sreachData=">
-            <Icon type="bag"></Icon> {{searchItem}}
+          <BreadcrumbItem to="/goodsList?searchData=">
+            <Icon type="bag"></Icon> {{searchLabel}}
           </BreadcrumbItem>
         </Breadcrumb>
       </div>
       <!-- 商品标签导航 -->
-      <GoodsClassNav></GoodsClassNav>
+<!--      <GoodsClassNav></GoodsClassNav>-->
       <!-- 商品展示容器 -->
       <div class="goods-box">
         <div class="as-box">
@@ -22,59 +22,57 @@
             <span>商品精选</span>
             <span>广告</span>
           </div>
-          <div class="item-as" v-for="(item,index) in asItems" :key="index">
+          <div class="item-as" v-for="(item,index) in recommendGoodsList" :key="index">
             <div class="item-as-img">
-              <img :src="item.img" alt="">
+              <router-link :to="{path:'/goodsDetail', query:{ id: item.id}}"><img :src="item.coverImg" alt=""></router-link>
             </div>
             <div class="item-as-price">
               <span>
-                <Icon type="social-yen text-danger"></Icon>
-                <span class="seckill-price text-danger">{{item.price}}</span>
+                <span class="seckill-price text-danger">￥{{item.minPrice}}</span>
               </span>
             </div>
-            <div class="item-as-intro">
-              <span>{{item.intro}}</span>
+            <div class="item-as-intro font-color">
+              <router-link :to="{path:'/goodsDetail', query:{ id: item.id}}"><span  class="font-color">{{item.name}}</span></router-link>
             </div>
             <div class="item-as-selled">
-              已有<span>{{item.num}}</span>人评价
+              已有<span>{{item.sale}}</span>人购买
             </div>
           </div>
         </div>
         <div class="goods-list-box">
           <div class="goods-list-tool">
             <ul>
-              <li v-for="(item,index) in goodsTool" :key="index" @click="orderBy(item.en, index)"><span :class="{ 'goods-list-tool-active': isAction[index]}">{{item.title}} <Icon :type="icon[index]"></Icon></span></li>
+              <li v-for="(item,index) in goodsTool" :key="index" @click="sortBy(item.en, index)"><span :class="{ 'goods-list-tool-active': isAction[index]}">{{item.title}} <Icon :type="icon[index]"></Icon></span></li>
             </ul>
           </div>
           <div class="goods-list">
-            <div class="goods-show-info" v-for="(item, index) in orderGoodsList" :key="index">
+            <div class="goods-show-info" v-for="(item, index) in goodsList" :key="index">
               <div class="goods-show-img">
-                <router-link to="/goodsDetail"><img :src="item.img"/></router-link>
+                <router-link :to="{path:'/goodsDetail', query:{ id: item.id}}"><img :src="item.coverImg"/></router-link>
               </div>
               <div class="goods-show-price">
                 <span>
-                  <Icon type="social-yen text-danger"></Icon>
-                  <span class="seckill-price text-danger">{{item.price}}</span>
+                  <span class="seckill-price text-danger">￥{{item.minPrice}}</span>
                 </span>
               </div>
-              <div class="goods-show-detail">
-                <span>{{item.intro}}</span>
+              <div class="goods-show-detail" >
+                <router-link :to="{path:'/goodsDetail', query:{ id: item.id}}"><span class="font-color">{{item.name}}</span></router-link>
               </div>
               <div class="goods-show-num">
-                已有<span>{{item.remarks}}</span>人评价
+                已有<span>{{item.sale}}</span>人购买
               </div>
               <div class="goods-show-seller">
-                <span>{{item.shopName}}</span>
+                <span>{{item.shop.name}}</span>
               </div>
             </div>
           </div>
         </div>
       </div>
       <div class="goods-page">
-        <Page :total="100" show-sizer></Page>
+        <Page :total="total" :current="listQuery.pageNum" :page-size="listQuery.pageSize" @change="handlePageChange()"></Page>
       </div>
     </div>
-    <Spin size="large" fix v-if="isLoading"></Spin>
+    <Spin size="large" fix v-if="listLoading"></Spin>
   </div>
 </template>
 
@@ -82,8 +80,8 @@
 import Search from '@/components/Search'
 import GoodsListNav from '@/components/nav/GoodsListNav'
 import GoodsClassNav from '@/components/nav/GoodsClassNav'
-import store from '@/vuex/store'
-import { mapState, mapActions, mapGetters, mapMutations } from 'vuex'
+import { fetchGoodsList, fetchRecommendGoodsList } from '@/api/goods'
+
 export default {
   name: 'GoodsList',
   beforeRouteEnter (to, from, next) {
@@ -92,44 +90,75 @@ export default {
   },
   data () {
     return {
-      searchItem: '',
+      listQuery: {
+        pageNum: 1,
+        pageSize: 16,
+        itemId: null,
+        sortBy: null,
+        sortType: null
+      },
+      total: null,
+      searchItem: null,
+      searchLabel: '',
+      goodsList: [],
+      listLoading: false,
+      recommendGoodsList: [],
+      sortTypeArr: ['asc', 'desc', 'asc'],
       isAction: [ true, false, false ],
       icon: [ 'arrow-up-a', 'arrow-down-a', 'arrow-down-a' ],
       goodsTool: [
-        {title: '综合', en: 'sale'},
-        {title: '评论数', en: 'remarks'},
-        {title: '价格', en: 'price'}
+        {title: '综合', en: 'sortId'},
+        {title: '销量', en: 'sale'},
+        {title: '价格', en: 'minPrice'}
       ]
     }
   },
-  computed: {
-    ...mapState(['asItems', 'isLoading']),
-    ...mapGetters(['orderGoodsList'])
-  },
   methods: {
-    ...mapActions(['loadGoodsList']),
-    ...mapMutations(['SET_GOODS_ORDER_BY']),
-    orderBy (data, index) {
+    sortBy (data, index) {
       console.log(data)
       this.icon = [ 'arrow-down-a', 'arrow-down-a', 'arrow-down-a' ]
       this.isAction = [ false, false, false ]
       this.isAction[index] = true
       this.icon[index] = 'arrow-up-a'
-      this.SET_GOODS_ORDER_BY(data)
+      this.listQuery.sortBy = data
+      this.listQuery.sortType = this.sortTypeArr[index]
+      this.getGoodsList()
+    },
+    getRecommendGoodsList () {
+      this.listLoading = true
+      fetchRecommendGoodsList({itemId: this.searchItem}).then(response => {
+        this.listLoading = false
+        this.recommendGoodsList = response.data
+        this.total = response.data.total
+      })
+    },
+    getGoodsList () {
+      fetchGoodsList(this.listQuery).then(response => {
+        this.goodsList = response.data.records
+      })
+    },
+    handlePageChange (i) {
+      this.listQuery.pageNum = i
+      this.getGoodsList()
     }
   },
   created () {
-    this.loadGoodsList()
+    this.listQuery.pageNum = 1
+    this.listQuery.sortBy = 'sortId'
+    this.listQuery.sortType = 'asc'
+    this.searchItem = this.$route.query.searchItem
+    this.getRecommendGoodsList()
+    this.getGoodsList()
   },
   mounted () {
-    this.searchItem = this.$route.query.sreachData
+    this.searchLabel = this.$route.query.searchLabel
+    this.listQuery.itemId = this.$route.query.searchItem
   },
   components: {
     Search,
     GoodsListNav,
     GoodsClassNav
-  },
-  store
+  }
 }
 </script>
 
@@ -148,6 +177,7 @@ export default {
   font-weight: bold
 }
 .goods-box {
+  margin-top: 20px;
   display: flex
 }
 /* ---------------侧边广告栏开始------------------- */
@@ -179,6 +209,10 @@ export default {
   width: 160px;
   height: 160px;
   margin: 0px auto
+}
+.item-as-img img {
+  width: 100%;
+  height: 100%;
 }
 .item-as-price span{
   font-size: 18px
@@ -274,6 +308,19 @@ export default {
   margin-top: 20px;
   display: flex;
   justify-content: flex-end
+}
+.goods-show-img {
+  width: 220px;
+  height: 220px;
+}
+
+.goods-show-img img {
+  width: 100%;
+  height: 100%;
+}
+
+.font-color {
+  color: #495060;
 }
 /* ---------------商品栏结束------------------- */
 </style>

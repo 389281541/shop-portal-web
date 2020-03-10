@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie'
 
-const TokenKey = 'loginToken'
+const TokenKey = 'portalToken'
 
 export function getToken () {
   return Cookies.get(TokenKey)

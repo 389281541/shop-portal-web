@@ -1,4 +1,5 @@
 import axios from 'axios'
+// import router from '@/router'
 import { Message, MessageBox } from 'element-ui'
 import store from '@/vuex/store'
 import { getToken } from '@/utils/auth'
@@ -31,6 +32,11 @@ service.interceptors.response.use(
     const res = response.data
     console.log('res=' + res.code)
     if (res.code !== 0) {
+      // // 未登录，跳转到登录页
+      // if (res.code === 201500) {
+      //   router.push('/login')
+      //   return response
+      // }
       Message({
         message: res.message,
         type: 'error',

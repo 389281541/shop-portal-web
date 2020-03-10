@@ -5,14 +5,14 @@
         <ul>
           <li>全部商品分类</li>
           <li><router-link to="/">首页</router-link></li>
-          <li><router-link to="/">服装城</router-link></li>
-          <li><router-link to="/">美妆馆</router-link></li>
-          <li><router-link to="/">BIT超市</router-link></li>
-          <li><router-link to="/">生鲜</router-link></li>
-          <li><router-link to="/">全球购</router-link></li>
-          <li><router-link to="/">闪购</router-link></li>
-          <li><router-link to="/">拍卖</router-link></li>
-          <li><router-link to="/">金融</router-link></li>
+          <li>服装城</li>
+          <li>美妆馆</li>
+          <li>RAINBOW超市</li>
+          <li>生鲜</li>
+          <li>全球购</li>
+          <li>闪购</li>
+          <li>拍卖</li>
+          <li>金融</li>
         </ul>
       </div>
     </div>

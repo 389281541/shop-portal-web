@@ -12,7 +12,7 @@
       <div class="nav-side" ref="navSide">
         <ul>
           <li v-for="item in itemList" :key="item.id">
-              <span class="nav-side-item" v-for="child in item.children" :key="child.id">{{child.name}}&nbsp;&nbsp;&nbsp;</span>
+            <span class="nav-side-item" v-for="child in item.children" :key="child.id"><router-link tag="a" :to="{path:'/goodsList', query:{searchLabel:child.name, searchItem:child.id}}">{{child.name}}&nbsp;&nbsp;&nbsp;</router-link></span>
           </li>
         </ul>
       </div>
@@ -153,9 +153,13 @@ export default {
 .nav-side li:hover {
   background: #999395
 }
-.nav-side-item:hover {
+.nav-side-item a:hover {
   cursor: pointer;
   color: #c81623
+}
+
+.nav-side-item a {
+  color: #ffffff;
 }
 
 /*导航内容*/

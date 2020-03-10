@@ -1,14 +1,11 @@
 <template>
   <div class="info-form">
+    <div class="title">
+      <h1>个人信息</h1>
+    </div>
      <Form ref="customerInfo" :model="customerInfo" :rules="ruleValidate" :label-width="80" >
-        <FormItem label="用户名" prop="userName">
-            <i-input v-model="customerInfo.userName" clearable placeholder="请输入你的用户名"></i-input>
-        </FormItem>
-        <FormItem label="密码" prop="passWord">
-            <i-input type="password" v-model="passWord" clearable placeholder="请输入你的密码"></i-input>
-        </FormItem>
-        <FormItem label="确认密码" prop="rePassword">
-            <i-input type="password" v-model="rePassword" clearable  placeholder="请再次输入你的密码"></i-input>
+        <FormItem label="手机号" prop="mobile">
+            <i-input v-model="customerInfo.mobile" clearable placeholder="请输入你的手机号"></i-input>
         </FormItem>
        <FormItem label="用户头像" prop="avatar">
          <single-upload v-model="customerInfo.avatar"></single-upload>
@@ -35,6 +32,8 @@
          <span slot="label">生日</span>
          <DatePicker
            format="yyyy-MM-dd"
+           value-format="yyyy-MM-dd"
+           :value="customerInfo.birthday"
            type="date"
            placeholder="请选择日期"
            @on-change="customerInfo.birthday=$event"></DatePicker>
@@ -42,44 +41,30 @@
        <FormItem label="邮箱" prop="email">
          <i-input v-model="customerInfo.email" clearable  placeholder="请输入你的邮箱"></i-input>
        </FormItem>
-        <Button type="error" size="large" long @click="handleSubmit('customerInfo')">注册</Button>
+        <Button type="error" class="submit" long @click="handleSubmit('customerInfo')">修改</Button>
     </Form>
   </div>
 </template>
 
 <script>
-import store from '@/vuex/store'
-import { mapMutations, mapActions } from 'vuex'
 import SingleUpload from '@/components/Upload/singleUpload'
-import { registerCustomer } from '@/api/customer'
-import md5 from 'js-md5'
-
+import { getCustomerInfo, updateCustomer } from '@/api/customer'
+const defaultCustomerInfo = {
+  mobile: '',
+  avatar: '',
+  identityName: '',
+  identityType: null,
+  identityNo: '',
+  gender: null,
+  birthday: '',
+  email: ''
+}
 export default {
   name: 'InputInfo',
   components: { SingleUpload },
   data () {
-    const validatePassCheck = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请再次输入密码'))
-      } else if (value !== this.passWord) {
-        callback(new Error('两次输入的密码不一样'))
-      } else {
-        callback()
-      }
-    }
     return {
-      customerInfo: {
-        avatar: '',
-        userName: null,
-        password: null,
-        email: null,
-        identityType: null,
-        identityNo: null,
-        identityName: null,
-        gender: null,
-        birthday: null,
-        mobile: null
-      },
+      customerInfo: Object.assign({}, defaultCustomerInfo),
       passWord: null,
       rePassword: null,
       ruleValidate: {
@@ -88,12 +73,6 @@ export default {
         ],
         email: [
           { type: 'email', message: '邮箱格式错误', trigger: 'blur' }
-        ],
-        passWord: [
-          { type: 'string', min: 6, message: '密码长度不能小于6', trigger: 'blur' }
-        ],
-        repassword: [
-          { validator: validatePassCheck, trigger: 'blur' }
         ]
       },
       idTypeList: [{
@@ -116,35 +95,44 @@ export default {
     }
   },
   created () {
-    this.customerInfo.mobile = this.$route.query.phone
+    getCustomerInfo().then(response => {
+      this.customerInfo = response.data
+    })
   },
   methods: {
-    ...mapMutations(['SET_SIGN_UP_SETP']),
-    ...mapActions(['addSignUpUser']),
     handleSubmit (name) {
-      const father = this
       this.$refs[name].validate((valid) => {
         if (valid) {
-          let encodePassword = md5(md5(this.passWord.trim()) + 'abcd1234')
-          this.customerInfo.password = encodePassword
-          registerCustomer(this.customerInfo).then(() => {
-            father.SET_SIGN_UP_SETP(2)
-            this.$router.push({ path: '/SignUp/signUpDone' })
-          }).catch(() => {
-            this.$Message.error('用戶已注冊')
+          updateCustomer(this.customerInfo).then(response => {
+            let res = response.data
+            if (res) {
+              this.$Message.success('修改成功')
+            } else {
+              this.$Message.error('修改失败')
+            }
           })
-        } else {
-          this.$Message.error('注册失败')
         }
       })
     }
-  },
-  store
+  }
 }
 </script>
 
 <style scoped>
+.title {
+  margin-bottom: 15px;
+  text-align: center
+}
 .info-form {
-  width: 90% !important
+  margin: 15px auto;
+  width: 60%;
+  min-width: 600px
+}
+.submit {
+  width: 80px;
+  height: 40px;
+  display: flex;
+  margin: 0 auto;
+  justify-content: center
 }
 </style>

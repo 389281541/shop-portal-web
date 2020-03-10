@@ -9,27 +9,35 @@
             </div>
             <p>{{userInfo.name}}</p>
           </div>
-          <sub-menu name="1">
+          <Submenu name="1">
             <template slot="title">
-                <Icon type="location"></Icon>
-                <span>收货地址</span>
+              <Icon type="ios-person" size="24"></Icon>
+              <span>个人信息</span>
             </template>
+            <menu-item name="MyInfo">个人信息</menu-item>
             <menu-item name="myAddress">我的收货地址</menu-item>
             <menu-item name="addAddress">添加收货地址</menu-item>
-          </sub-menu>
+          </Submenu>
           <Submenu name="2">
             <template slot="title">
-                <Icon type="clipboard"></Icon>
-                <span>购物订单</span>
+                <Icon type="ios-paper" size="24"></Icon>
+                <span>订单</span>
             </template>
             <menu-item name="myOrder">我的订单</menu-item>
           </Submenu>
           <Submenu name="3">
             <template slot="title">
-                <Icon type="ios-cart"></Icon>
+                <Icon type="ios-cart" size="24"></Icon>
                 <span>购物车</span>
             </template>
             <menu-item name="myShoppingCart">我的购物车</menu-item>
+          </Submenu>
+          <Submenu name="4">
+            <template slot="title">
+              <Icon type="ios-pricetag" size="24"></Icon>
+              <span>优惠券</span>
+            </template>
+            <menu-item name="myCoupon">我的优惠券</menu-item>
           </Submenu>
         </Menu>
       </Sider>
@@ -42,7 +50,7 @@
             <router-view></router-view>
           </transition>
         </content>
-        <Footer class="layout-footer-center">2020 &copy; lujinwei</Footer>
+        <Footer class="layout-footer-center">2020 &copy; vigo</Footer>
       </Layout>
     </Layout>
   </div>

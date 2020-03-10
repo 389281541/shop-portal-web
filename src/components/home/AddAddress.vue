@@ -6,25 +6,22 @@
       </div>
       <div class="add-box">
         <Form :model="formData" label-position="left" :label-width="100" :rules="ruleInline">
-          <FormItem label="收件人" prop="name">
-            <i-input v-model="formData.name" size="large"></i-input>
+          <FormItem label="收件人" prop="receiverName">
+            <i-input v-model="formData.receiverName" size="large"></i-input>
           </FormItem>
           <FormItem label="收件地区" prop="address">
-            <Distpicker :province="formData.province" :city="formData.city" :area="formData.area" @province="getProvince" @city="getCity" @area="getArea"></Distpicker>
+            <Distpicker :province="formData.province" :city="formData.city" :area="formData.district" @province="getProvince" @city="getCity" @area="getArea"></Distpicker>
           </FormItem>
           <FormItem label="收件地址" prop="address">
             <i-input v-model="formData.address" size="large"></i-input>
           </FormItem>
-          <FormItem label="手机号码" prop="phone">
-            <i-input v-model="formData.phone" size="large"></i-input>
-          </FormItem>
-          <FormItem label="邮政编码" prop="postalcode">
-            <i-input v-model="formData.postalcode" size="large"></i-input>
+          <FormItem label="邮政编码" prop="zip">
+            <i-input v-model="formData.zip" size="large"></i-input>
           </FormItem>
         </Form>
       </div>
       <div class="add-submit">
-        <Button type="primary">添加地址</Button>
+        <Button type="error" size="large" @click="handleAdd">添加地址</Button>
       </div>
     </div>
   </div>
@@ -32,32 +29,29 @@
 
 <script>
 import Distpicker from 'v-distpicker'
+import {addAddress} from '@/api/address'
+const defaultFormData = {
+  receiverName: '',
+  province: '',
+  city: '',
+  district: null,
+  address: '',
+  zip: ''
+}
 export default {
   name: 'AddAddress',
   data () {
     return {
-      formData: {
-        name: '',
-        address: '',
-        phone: '',
-        postalcode: '',
-        province: '广东省',
-        city: '广州市',
-        area: '天河区'
-      },
+      formData: Object.assign({}, defaultFormData),
       ruleInline: {
-        name: [
+        receiverName: [
           { required: true, message: '请输入姓名', trigger: 'blur' }
         ],
         address: [
           { required: true, message: '请输入地址', trigger: 'blur' }
         ],
-        postalcode: [
+        zip: [
           { required: true, message: '请输入邮政编码', trigger: 'blur' }
-        ],
-        phone: [
-          { required: true, message: '手机号不能为空', trigger: 'blur' },
-          { type: 'string', pattern: /^1[3|4|5|7|8][0-9]{9}$/, message: '手机号格式出错', trigger: 'blur' }
         ]
       }
     }
@@ -70,7 +64,17 @@ export default {
       this.formData.city = data.value
     },
     getArea (data) {
-      this.formData.area = data.value
+      this.formData.district = data.value
+    },
+    handleAdd () {
+      addAddress(this.formData).then(response => {
+        let res = response.data
+        if (res) {
+          this.$Message.success('添加成功')
+        } else {
+          this.$Message.error('添加失败')
+        }
+      })
     }
   },
   components: {

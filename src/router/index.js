@@ -14,10 +14,12 @@ const Pay = resolve => require(['@/components/Pay'], resolve)
 const PayDone = resolve => require(['@/components/PayDone'], resolve)
 const Freeback = resolve => require(['@/components/Freeback'], resolve)
 const Home = resolve => require(['@/components/Home'], resolve)
+const MyInfo = resolve => require(['@/components/home/MyInfo'], resolve)
 const MyAddress = resolve => require(['@/components/home/MyAddress'], resolve)
 const AddAddress = resolve => require(['@/components/home/AddAddress'], resolve)
 const MyOrder = resolve => require(['@/components/home/MyOrder'], resolve)
 const MyShoppingCart = resolve => require(['@/components/home/MyShoppingCart'], resolve)
+const MyCoupon = resolve => require(['@/components/home/MyCoupon'], resolve)
 const Merchant = resolve => require(['@/components/Merchant'], resolve)
 
 Vue.use(Router)
@@ -106,6 +108,11 @@ export const constantRouterMap = [
         component: MyOrder
       },
       {
+        path: 'myInfo',
+        name: 'MyInfo',
+        component: MyInfo
+      },
+      {
         path: 'myAddress',
         name: 'MyAddress',
         component: MyAddress
@@ -124,6 +131,11 @@ export const constantRouterMap = [
         path: 'myShoppingCart',
         name: 'MyShoppingCart',
         component: MyShoppingCart
+      },
+      {
+        path: 'myCoupon',
+        name: 'MyCoupon',
+        component: MyCoupon
       }
     ]
   },

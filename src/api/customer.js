@@ -1,5 +1,21 @@
 import request from '@/utils/request'
 
+export function updateCustomer (data) {
+  return request({
+    url: '/customer/updateInfo',
+    method: 'post',
+    data: data
+  })
+}
+
+export function getCustomerInfo (data) {
+  return request({
+    url: '/customer/info',
+    method: 'post',
+    data: data
+  })
+}
+
 export function registerCustomer (data) {
   return request({
     url: '/customer/register',
