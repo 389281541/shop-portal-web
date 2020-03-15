@@ -7,19 +7,20 @@
           <i class="fa fa-fire"></i>
         </div>
         <div class="shop-title-content">
-          <p><router-link to="/merchant">{{ shopIntro.shopName }}</router-link></p>
-          <p><router-link to="/merchant">{{ shopIntro.slogen }}</router-link></p>
+          <div class="shop-logo">
+            <router-link :to="{path:'/merchant', query:{ id: value.id}}"><img :src="value.avatar" alt="" style="vertical-align:middle"></router-link>
+          </div>
+          <router-link :to="{path:'/merchant', query:{ id: value.id}}"><div class="shop-name">{{ value.name }}</div></router-link>
         </div>
       </div>
       <div class="shop-another-item">
-        <div class="shop-another-item-detail" v-for="(item, index) in shopIntro.showGoods" :key="index">
+        <div class="shop-another-item-detail" v-for="(item, index) in value.newGoodsList" :key="index">
           <div class="shop-another-item-img">
-            <img :src="item.img" alt="">
+            <img :src="item.coverImg" alt="">
           </div>
-          <div class="shop-anoter-item-intro">
-            <p>{{ item.intro[0] }}</p>
-            <p>{{ item.intro[1] }}</p>
-          </div>
+<!--          <div class="shop-anoter-item-intro">-->
+<!--            <p>{{ item.name }}</p>-->
+<!--          </div>-->
         </div>
       </div>
     </div>
@@ -29,26 +30,11 @@
 <script>
 export default {
   name: 'ShopHeader',
+  props: {
+    value: Object
+  },
   data () {
     return {
-      shopIntro: {
-        shopName: 'Gavin Shop',
-        slogen: 'The Best Thing For You',
-        showGoods: [
-          {
-            img: 'static/img/goodsList/item-show-1.jpg',
-            intro: [ '全身磨砂', '防指纹' ]
-          },
-          {
-            img: 'static/img/goodsList/item-show-2.jpg',
-            intro: [ '环保PP材质', '不发黄' ]
-          },
-          {
-            img: 'static/img/goodsList/item-show-3.jpg',
-            intro: [ '0.4mm纤细', '纤薄手感' ]
-          }
-        ]
-      }
     }
   }
 }
@@ -99,6 +85,23 @@ export default {
 .shop-another-item {
   display: flex;
   flex-direction: row
+}
+
+.shop-logo {
+  width: 40px;
+  height: 40px;
+}
+
+.shop-name {
+  font-size:20px;
+  font-style: inherit;
+  margin-top:-35px;
+  padding-left:60px
+}
+
+.shop-logo img {
+  width: 100%;
+  height: 100%;
 }
 
 .shop-another-item-detail {

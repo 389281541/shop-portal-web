@@ -6,14 +6,14 @@
           <p>店铺热销</p>
         </div>
         <div class="item-intro-recommend-column">
-          <div class="item-recommend-column" v-for="(item, index) in goodsInfo.hot" :key="index">
+          <div class="item-recommend-column" v-for="(item, index) in hotGoodsList" :key="index">
             <div class="item-recommend-img">
-              <img :src="item.img" alt="">
+              <router-link :to="{path:'/goodsDetail', query:{ id: item.id}}"><img :src="item.coverImg" alt=""></router-link>
             </div>
             <div class="item-recommend-intro">
               <span>
                 <span class="item-recommend-top-num">{{index + 1}}</span> 热销{{item.sale}}件</span>
-              <span class="item-recommend-price">￥{{item.price.toFixed(2)}}</span>
+              <span class="item-recommend-price">￥{{item.minPrice.toFixed(2)}}</span>
             </div>
           </div>
         </div>
@@ -26,7 +26,8 @@
                 <span>商品介绍</span>
               </div>
               <div class="item-intro-img" ref="itemIntroGoods">
-                <img :src="item" alt="" v-for="(item,index) in goodsInfo.goodsDetail" :key="index">
+<!--                <img :src="item" alt="" v-for="(item,index) in goodsInfo.goodsDetail" :key="index">-->
+                <img :src="value.masterImgUrl" alt="">
               </div>
             </TabPane>
             <TabPane label="规格参数">
@@ -34,58 +35,58 @@
                 <span>规格参数</span>
               </div>
               <div class="item-param-container">
-                <span class="item-param-box" v-for="(item,index) in goodsInfo.param" :key="index">
-                  <span class="item-param-title">{{item.title}}: </span>
-                  <span class="item-param-content">{{item.content}}</span>
+                <span class="item-param-box" v-for="(item,index) in value.spuParameters" :key="index">
+                  <span class="item-param-title">{{item.specName}}: </span>
+                  <span class="item-param-content">{{item.specValue}}</span>
                 </span>
               </div>
             </TabPane>
             <TabPane label="售后保障">
               <ShowProductWarranty></ShowProductWarranty>
             </TabPane>
-            <TabPane label="商品评价">
-              <div class="remarks-container">
-                <div class="remarks-title">
-                  <span>商品评价</span>
-                </div>
-                <div class="remarks-analyse-box">
-                  <div class="remarks-analyse-goods">
-                    <i-circle :percent="goodsInfo.remarks.goodAnalyse" stroke-color="#e4393c">
-                      <span class="remarks-analyse-num">{{goodsInfo.remarks.goodAnalyse}}%</span>
-                      <p class="remarks-analyse-title">好评率</p>
-                    </i-circle>
-                  </div>
-                  <div class="remarks-analyse-tags">
-                    <Tag checkable :color="tagsColor[index % 4]" v-for="(item,index) in goodsInfo.remarks.remarksTags" :key="index">{{item}}</Tag>
-                  </div>
-                </div>
-                <div class="remarks-bar">
-                  <span>追评({{goodsInfo.remarks.remarksNumDetail[0]}})</span>
-                  <span>好评({{goodsInfo.remarks.remarksNumDetail[1]}})</span>
-                  <span>中评({{goodsInfo.remarks.remarksNumDetail[2]}})</span>
-                  <span>差评({{goodsInfo.remarks.remarksNumDetail[3]}})</span>
-                </div>
-                <div class="remarks-box" v-for="(item,index) in goodsInfo.remarks.detail" :key="index">
-                  <div class="remarks-user">
-                    <Avatar icon="person" />
-                    <span class="remarks-user-name">{{item.username}}</span>
-                  </div>
-                  <div class="remarks-content-box">
-                    <p>
-                      <Rate disabled :value="item.values" allow-half class="remarks-star"></Rate>
-                    </p>
-                    <p class="remarks-content">{{item.content}}</p>
-                    <p class="remarks-sub">
-                      <span class="remarks-item">{{item.goods}}</span>
-                      <span class="remarks-time">{{item.time}}</span>
-                    </p>
-                  </div>
-                </div>
-                <div class="remarks-page">
-                  <Page :total="40" size="small" show-elevator show-sizer></Page>
-                </div>
-              </div>
-            </TabPane>
+<!--            <TabPane label="商品评价">-->
+<!--              <div class="remarks-container">-->
+<!--                <div class="remarks-title">-->
+<!--                  <span>商品评价</span>-->
+<!--                </div>-->
+<!--                <div class="remarks-analyse-box">-->
+<!--                  <div class="remarks-analyse-goods">-->
+<!--                    <i-circle :percent="goodsInfo.remarks.goodAnalyse" stroke-color="#e4393c">-->
+<!--                      <span class="remarks-analyse-num">{{goodsInfo.remarks.goodAnalyse}}%</span>-->
+<!--                      <p class="remarks-analyse-title">好评率</p>-->
+<!--                    </i-circle>-->
+<!--                  </div>-->
+<!--                  <div class="remarks-analyse-tags">-->
+<!--                    <Tag checkable :color="tagsColor[index % 4]" v-for="(item,index) in goodsInfo.remarks.remarksTags" :key="index">{{item}}</Tag>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--                <div class="remarks-bar">-->
+<!--                  <span>追评({{goodsInfo.remarks.remarksNumDetail[0]}})</span>-->
+<!--                  <span>好评({{goodsInfo.remarks.remarksNumDetail[1]}})</span>-->
+<!--                  <span>中评({{goodsInfo.remarks.remarksNumDetail[2]}})</span>-->
+<!--                  <span>差评({{goodsInfo.remarks.remarksNumDetail[3]}})</span>-->
+<!--                </div>-->
+<!--                <div class="remarks-box" v-for="(item,index) in goodsInfo.remarks.detail" :key="index">-->
+<!--                  <div class="remarks-user">-->
+<!--                    <Avatar icon="person" />-->
+<!--                    <span class="remarks-user-name">{{item.username}}</span>-->
+<!--                  </div>-->
+<!--                  <div class="remarks-content-box">-->
+<!--                    <p>-->
+<!--                      <Rate disabled :value="item.values" allow-half class="remarks-star"></Rate>-->
+<!--                    </p>-->
+<!--                    <p class="remarks-content">{{item.content}}</p>-->
+<!--                    <p class="remarks-sub">-->
+<!--                      <span class="remarks-item">{{item.goods}}</span>-->
+<!--                      <span class="remarks-time">{{item.time}}</span>-->
+<!--                    </p>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--                <div class="remarks-page">-->
+<!--                  <Page :total="40" size="small" show-elevator show-sizer></Page>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </TabPane>-->
           </Tabs>
         </div>
       </div>
@@ -95,17 +96,31 @@
 
 <script>
 import ShowProductWarranty from '@/components/goodsDetail/ShowProductWarranty'
-import store from '@/vuex/store'
-import { mapState } from 'vuex'
 export default {
   name: 'ShowGoodsDetail',
+  props: {
+    value: Object
+  },
   data () {
     return {
+      hotGoodsList: null,
       tagsColor: [ 'blue', 'green', 'red', 'yellow' ]
     }
   },
   computed: {
-    ...mapState(['goodsInfo'])
+    hot () {
+      return this.value.hotGoodsList
+    }
+  },
+  watch: {
+    hot: function (newValue) {
+      if (newValue === undefined || newValue === null || newValue === 0) {
+        return
+      }
+      this.handleEditCreated()
+    }
+  },
+  created () {
   },
   methods: {
     changeHeight () {
@@ -113,6 +128,9 @@ export default {
       console.log(heightCss)
       heightCss = parseInt(heightCss.substr(0, heightCss.length - 2)) + 89
       this.$refs.itemIntroDetail.style.height = heightCss + 'px'
+    },
+    handleEditCreated () {
+      this.hotGoodsList = this.value.hotGoodsList
     }
   },
   updated () {
@@ -131,8 +149,7 @@ export default {
   },
   components: {
     ShowProductWarranty
-  },
-  store
+  }
 }
 </script>
 

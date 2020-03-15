@@ -15,3 +15,11 @@ export function fetchRecommendGoodsList (data) {
     data: data
   })
 }
+
+export function getGoodsDetail (data) {
+  return request({
+    url: '/goods/get',
+    method: 'post',
+    data: data
+  })
+}

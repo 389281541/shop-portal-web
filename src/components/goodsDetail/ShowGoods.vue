@@ -3,10 +3,10 @@
     <div class="item-detail-show">
       <div class="item-detail-left">
         <div class="item-detail-big-img">
-          <img :src="goodsInfo.goodsImg[imgIndex]" alt="">
+          <img :src="bigImg" alt="">
         </div>
         <div class="item-detail-img-row">
-          <div class="item-detail-img-small" v-for="(item, index) in goodsInfo.goodsImg" :key="index" @mouseover="showBigImg(index)">
+          <div class="item-detail-img-small" v-for="(item, index) in value.photoList" :key="index" @mouseover="showBigImg(item, index)">
             <img :src="item" alt="">
           </div>
         </div>
@@ -14,72 +14,66 @@
       <div class="item-detail-right">
         <div class="item-detail-title">
           <p>
-            <span class="item-detail-express">校园配送</span> {{goodsInfo.title}}</p>
+            <span class="item-detail-express">包邮配送</span> {{value.name}}</p>
         </div>
-        <div class="item-detail-tag">
-          <p>
-            <span v-for="(item,index) in goodsInfo.tags" :key="index">【{{item}}】</span>
-          </p>
+        <div class="seckill-head" v-if="value.promotionType === 1 || flashType === 1">
+          <div class="seckill-icon">
+            <img src="static/img/index/clock.png">
+          </div>
+          <div class="seckill-text">
+            <span v-if="flashType === 1" class="seckill-title">限时秒杀</span>
+            <span v-else-if="flashType === 0" class="seckill-title">限时促销</span>
+          </div>
+          <div class="count-down">
+            <span class="count-down-text">距离结束</span>
+            <span class="count-down-num count-down-hour">{{killTime.hour}}</span>
+            <span class="count-down-point">:</span>
+            <span class="count-down-num count-down-minute">{{killTime.minute}}</span>
+            <span class="count-down-point">:</span>
+            <span class="count-down-num count-down-seconds">{{killTime.seconds}}</span>
+          </div>
         </div>
         <div class="item-detail-price-row">
           <div class="item-price-left">
             <div class="item-price-row">
               <p>
-                <span class="item-price-title">B I T 价</span>
-                <span class="item-price">￥{{price.toFixed(2)}}</span>
+                <span class="item-price-title">价&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;格</span>
+                <span class="item-price" v-if="this.selectedSku !== null">￥{{this.selectedSku.originalPrice.toFixed(2)}}</span>
               </p>
             </div>
             <div class="item-price-row">
               <p>
-                <span class="item-price-title">优 惠 价</span>
-                <span class="item-price-full-cut" v-for="(item,index) in goodsInfo.discount" :key="index">{{item}}</span>
+                <span class="item-price-title">促&nbsp;销&nbsp;价</span>
+                <span class="item-promotion-price" v-if="this.selectedSku !== null">￥{{this.selectedSku.price.toFixed(2)}}</span>
               </p>
             </div>
             <div class="item-price-row">
               <p>
-                <span class="item-price-title">促&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;销</span>
-                <span class="item-price-full-cut" v-for="(item,index) in goodsInfo.promotion" :key="index">{{item}}</span>
+                <span class="item-price-title">满&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;减</span>
+                <span class="item-price-full-cut" v-for="(item,index) in value.fullReductionList" :key="index">满{{item.fullPrice}}减{{item.reducePrice}}</span>
               </p>
             </div>
           </div>
           <div class="item-price-right">
             <div class="item-remarks-sum">
-              <p>累计评价</p>
+              <p>销量</p>
               <p>
-                <span class="item-remarks-num">{{goodsInfo.remarksNum}} 条</span>
+                <span class="item-remarks-num">{{value.sale}}</span>
               </p>
             </div>
           </div>
         </div>
         <!-- 选择颜色 -->
-        <div class="item-select">
+        <div class="item-select" v-for="(item, index) in value.specNameList" :key="index">
           <div class="item-select-title">
-            <p>选择颜色</p>
-          </div>
-          <div class="item-select-column">
-            <div class="item-select-row" v-for="(items, index) in goodsInfo.setMeal" :key="index">
-              <div class="item-select-box" v-for="(item, index1) in items" :key="index1" @click="select(index, index1)" :class="{'item-select-box-active': ((index * 3) + index1) === selectBoxIndex}">
-                <div class="item-select-img">
-                  <img :src="item.img" alt="">
-                </div>
-                <div class="item-select-intro">
-                  <p>{{item.intro}}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- 白条分期 -->
-        <div class="item-select">
-          <div class="item-select-title">
-            <p>白条分期</p>
+            <p>{{item.name}}:</p>
           </div>
           <div class="item-select-row">
-            <div class="item-select-class" v-for="(item,index) in hirePurchase" :key="index">
-              <Tooltip :content="item.tooltip" placement="top-start">
-                <span>{{item.type}}</span>
-              </Tooltip>
-            </div>
+              <div class="item-select-box" v-for="(subItem, subIndex) in item.children" :key="subIndex" @click="select(index, subIndex)" :class="{'item-select-box-active': subIndex === selectAttrMap[index]}">
+                <div class="item-select-intro">
+                  <p>{{subItem.name}}</p>
+                </div>
+              </div>
           </div>
         </div>
         <br>
@@ -87,88 +81,128 @@
           <div class="add-buy-car">
             <InputNumber :min="1" v-model="count" size="large"></InputNumber>
             <Button type="error" size="large" @click="addShoppingCartBtn()">加入购物车</Button>
+            <span class="item-price-title" v-if="this.selectedSku !== null">&nbsp;&nbsp;&nbsp;&nbsp;库存{{this.selectedSku.stock}}件</span>
           </div>
         </div>
       </div>
     </div>
   </div>
 </template>
-
 <script>
-import store from '@/vuex/store'
-import { mapState, mapActions } from 'vuex'
 export default {
   name: 'ShowGoods',
+  props: {
+    value: Object
+  },
+  computed: {
+    valueId () {
+      return this.value.id
+    }
+  },
+  watch: {
+    valueId: function (newValue) {
+      if (newValue === undefined || newValue === null || newValue === 0) {
+        return
+      }
+      this.handleEditCreated()
+    }
+  },
   data () {
     return {
       price: 0,
       count: 1,
+      flashType: 0,
       selectBoxIndex: 0,
-      imgIndex: 0
+      imgIndex: 0,
+      selectedSku: null,
+      bigImg: null,
+      killTime: {
+        seconds: 0,
+        minute: 0,
+        hour: 10
+      },
+      setIntervalObj: null,
+      selectAttrMap: {}
     }
   },
-  computed: {
-    ...mapState(['goodsInfo']),
-    hirePurchase () {
-      const three = this.price * this.count / 3
-      const sex = this.price * this.count / 6
-      const twelve = this.price * this.count / 12 * 1.0025
-      const twentyFour = this.price * this.count / 24 * 1.005
-      return [
-        {
-          tooltip: '无手续费',
-          type: '不分期'
-        },
-        {
-          tooltip: '无手续费',
-          type: `￥${three.toFixed(2)} x 3期`
-        },
-        {
-          tooltip: '无手续费',
-          type: `￥${sex.toFixed(2)} x 6期`
-        },
-        {
-          tooltip: '含手续费：费率0.25%起，￥0.1起×12期',
-          type: `￥${twelve.toFixed(2)} x 12期`
-        },
-        {
-          tooltip: '含手续费：费率0.5%起，￥0.1起×12期',
-          type: `￥${twentyFour.toFixed(2)} x 24期`
-        }
-      ]
-    }
+  created () {
   },
   methods: {
-    ...mapActions(['addShoppingCart']),
-    select (index1, index2) {
-      this.selectBoxIndex = index1 * 3 + index2
-      this.price = this.goodsInfo.setMeal[index1][index2].price
+    select (index, subIndex) {
+      this.selectAttrMap[index] = subIndex
+      console.log('index=' + index, 'subIndex=' + subIndex)
+      let selectSkuNameArray = []
+      for (let i = 0; i < this.value.specNameList.length; i++) {
+        let children = this.value.specNameList[i].children
+        for (let j = 0; j < children.length; j++) {
+          if (j === this.selectAttrMap[i]) {
+            selectSkuNameArray.push(children[j].name)
+          }
+        }
+      }
+      let skuName = selectSkuNameArray.join('_')
+      console.log('skuName=' + skuName)
+      this.selectedSku = this.getSkuByName(skuName)
+      console.log('this.selectedSku' + JSON.stringify(this.selectedSku))
     },
-    showBigImg (index) {
+    getSkuByName (skuName) {
+      for (let i = 0; i < this.value.skuList.length; i++) {
+        if (this.value.skuList[i].skuName === skuName) {
+          return this.value.skuList[i]
+        }
+      }
+    },
+    showBigImg (item, index) {
+      this.bigImg = item
       this.imgIndex = index
     },
     addShoppingCartBtn () {
-      const index1 = parseInt(this.selectBoxIndex / 3)
-      const index2 = this.selectBoxIndex % 3
-      const date = new Date()
-      const goodsId = date.getTime()
-      const data = {
-        goods_id: goodsId,
-        title: this.goodsInfo.title,
-        count: this.count,
-        package: this.goodsInfo.setMeal[index1][index2]
+    },
+
+    flashTimeUpdate () {
+      this.killTime.seconds--
+      if (this.killTime.seconds === -1) {
+        this.killTime.seconds = 59
+        this.killTime.minute--
+        if (this.killTime.minute === -1) {
+          this.killTime.minute = 59
+          this.killTime.hour--
+        }
       }
-      this.addShoppingCart(data)
-      this.$router.push('/shoppingCart')
+      this.killTime.seconds = this.prefixInteger(this.killTime.seconds, 2)
+      this.killTime.minute = this.prefixInteger(this.killTime.minute, 2)
+      this.killTime.hour = this.prefixInteger(this.killTime.hour, 2)
+    },
+    prefixInteger (number, length) {
+      return (Array(length).join('0') + number).slice(-length)
+    },
+    handleEditCreated () {
+      for (let i = 0; i < this.value.specNameList.length; i++) {
+        this.selectAttrMap[i] = 0
+      }
+      let selectSkuNameArray = []
+      for (let i = 0; i < this.value.specNameList.length; i++) {
+        let children = this.value.specNameList[i].children
+        for (let j = 0; j < children.length; j++) {
+          if (j === 0) {
+            selectSkuNameArray.push(children[j].name)
+          }
+        }
+      }
+      let skuName = selectSkuNameArray.join('_')
+      this.selectedSku = this.getSkuByName(skuName)
+      this.bigImg = this.value.photoList[0]
     }
   },
   mounted () {
     const father = this
-    setTimeout(() => {
-      father.price = father.goodsInfo.setMeal[0][0].price || 0
-    }, 300)
+    this.setIntervalObj = setInterval(function () {
+      father.flashTimeUpdate()
+    }, 1000)
   },
-  store
+  destroyed () {
+    clearInterval(this.setIntervalObj)
+  }
 }
 </script>
 
@@ -198,13 +232,16 @@ export default {
   margin-top: 15px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between
+  justify-content: flex-start
 }
 .item-detail-img-small {
   width: 68px;
   height: 68px;
   box-shadow: 0px 0px 8px #ccc;
   cursor: pointer
+}
+.item-detail-img-small :hover {
+  transform: translateY(-5px);
 }
 .item-detail-img-small img {
   width: 100%
@@ -251,8 +288,14 @@ export default {
   margin: 5px 0px
 }
 .item-price {
-  color: #e4393c;
-  font-size: 23px;
+  color: #999999;
+  text-decoration: line-through;
+  font-size: 15px;
+  cursor: pointer
+}
+.item-promotion-price {
+  color: #f90013;
+  font-size: 38px;
   cursor: pointer
 }
 .item-price-full-cut {
@@ -288,19 +331,20 @@ export default {
   font-size: 14px;
   margin-right: 15px
 }
-.item-select-column {
+.item-select-row {
   display: flex;
-  flex-direction: column
+  flex-direction: row
 }
 .item-select-row {
   display: flex;
   flex-direction: row;
-  margin-bottom: 8px
+  margin-bottom: 5px
 }
 .item-select-box {
   display: flex;
   flex-direction: row;
-  align-items: center
+  align-items: center;
+  margin-bottom: 0px
 }
 .item-select-img {
   width: 36px
@@ -342,6 +386,64 @@ export default {
 }
 .add-buy-car {
   margin-top: 15px
+}
+.seckill-head {
+  width: 100%;
+  height: 32px;
+  background-color: #fe0851
+}
+.seckill-icon {
+  width: 36px;
+  height: 100%;
+  float: left
+}
+.seckill-icon img {
+  width: 24px;
+  height: 24px;
+  margin-top: 4px;
+  margin-left: 10px;
+  animation-name: shake-clock;
+  animation-duration: 0.3s;
+  animation-iteration-count: infinite /*设置无线循环*/
+}
+.seckill-text {
+  width: 300px;
+  height: 100%;
+  float: left
+}
+.seckill-text .seckill-title {
+  font-size: 14px;
+  line-height: 32px;
+  margin-left: 20px;
+  color: #fff
+}
+.seckill-text .seckill-remarks {
+  margin-left: 5px;
+  font-size: 14px;
+  color: #fff
+}
+/*倒计时*/
+.count-down {
+  height: 100%;
+  margin-right: 20px;
+  line-height: 32px;
+  float: right
+}
+.count-down-text {
+  color: #fff
+}
+.count-down-num {
+  padding: 3px;
+  border-radius: 5px;
+  background-color: #440106;
+  font-size: 14px;
+  font-weight: bold;
+  color: #f90013
+}
+.count-down-point {
+  font-size: 14px;
+  font-weight: bold;
+  color: #440106
 }
 /******************商品图片及购买详情结束******************/
 </style>

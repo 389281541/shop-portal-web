@@ -28,7 +28,7 @@
             </div>
             <div class="item-as-price">
               <span>
-                <span class="seckill-price text-danger">￥{{item.minPrice}}</span>
+                <span class="seckill-price text-danger">￥{{item.minPrice.toFixed(2)}}</span>
               </span>
             </div>
             <div class="item-as-intro font-color">
@@ -52,7 +52,7 @@
               </div>
               <div class="goods-show-price">
                 <span>
-                  <span class="seckill-price text-danger">￥{{item.minPrice}}</span>
+                  <span class="seckill-price text-danger">￥{{item.minPrice.toFixed(2)}}</span>
                 </span>
               </div>
               <div class="goods-show-detail" >
@@ -185,7 +185,7 @@ export default {
   width: 200px;
   border: 1px solid #ccc
 }
-.item-as-title{
+.item-as-title {
   width: 100%;
   height: 36px;
   color: #B1191A;
@@ -235,31 +235,31 @@ export default {
   margin-left: 15px;
   width: calc(100% - 215px)
 }
-.goods-list-tool{
+.goods-list-tool {
   width: 100%;
   height: 38px;
   border: 1px solid #ccc;
   background-color: #F1F1F1
 }
-.goods-list-tool ul{
+.goods-list-tool ul {
   padding-left: 15px;
   list-style: none
 }
-.goods-list-tool li{
+.goods-list-tool li {
   cursor: pointer;
   float: left
 }
-.goods-list-tool span{
+.goods-list-tool span {
   padding: 5px 8px;
   border: 1px solid #ccc;
   border-left: none;
   line-height: 36px;
   background-color: #fff
 }
-.goods-list-tool span:hover{
+.goods-list-tool span:hover {
   border: 1px solid #E4393C
 }
-.goods-list-tool i:hover{
+.goods-list-tool i:hover {
   color: #E4393C
 }
 .goods-list-tool-active {
@@ -273,30 +273,30 @@ export default {
   flex-wrap: wrap;
   justify-content: space-between
 }
-.goods-show-info{
+.goods-show-info {
   width: 240px;
   padding: 10px;
   margin: 15px 0px;
   border: 1px solid #fff;
   cursor: pointer
 }
-.goods-show-info:hover{
+.goods-show-info:hover {
   border: 1px solid #ccc;
   box-shadow: 0px 0px 15px #ccc
 }
-.goods-show-price{
+.goods-show-price {
   margin-top: 6px
 }
 .goods-show-detail{
   font-size: 12px;
   margin: 6px 0px
 }
-.goods-show-num{
+.goods-show-num {
   font-size: 12px;
   margin-bottom: 6px;
   color: #009688
 }
-.goods-show-num span{
+.goods-show-num span {
   color: #005AA0;
   font-weight: bold
 }
@@ -312,6 +312,7 @@ export default {
 .goods-show-img {
   width: 220px;
   height: 220px;
+  margin: 0px auto
 }
 
 .goods-show-img img {

@@ -1,21 +1,16 @@
 <template>
   <div>
-    <Search></Search>
-    <ShopHeader></ShopHeader>
-    <GoodsDetailNav></GoodsDetailNav>
-    <div class="shop-item-path">
-      <div class="shop-nav-container">
-        <Breadcrumb>
-          <BreadcrumbItem to="/">首页</BreadcrumbItem>
-          <BreadcrumbItem to="/goodsList">手机壳</BreadcrumbItem>
-          <BreadcrumbItem>手机保护套</BreadcrumbItem>
-        </Breadcrumb>
-      </div>
-    </div>
+    <ShopHeader
+      v-model="shopGoodsParam"
+    ></ShopHeader>
     <!-- 商品信息展示 -->
-    <ShowGoods></ShowGoods>
+    <ShowGoods
+      v-model="goodsParam"
+    ></ShowGoods>
     <!-- 商品详细展示 -->
-    <ShowGoodsDetail></ShowGoodsDetail>
+    <ShowGoodsDetail
+      v-model="goodsParam"
+    ></ShowGoodsDetail>
     <Spin size="large" fix v-if="isLoading"></Spin>
   </div>
 </template>
@@ -26,8 +21,36 @@ import GoodsDetailNav from '@/components/nav/GoodsDetailNav'
 import ShopHeader from '@/components/header/ShopHeader'
 import ShowGoods from '@/components/goodsDetail/ShowGoods'
 import ShowGoodsDetail from '@/components/goodsDetail/ShowGoodsDetail'
-import store from '@/vuex/store'
-import { mapState, mapActions } from 'vuex'
+import {fetchShopGoodsInfo} from '@/api/shop'
+import {getGoodsDetail} from '@/api/goods'
+
+const defaultGoodsParam = {
+  id: null,
+  name: null,
+  shop: null,
+  minPrice: null,
+  promotionType: null,
+  promotionStartTime: null,
+  promotionEndTime: null,
+  masterImgUrl: null,
+  photoList: [],
+  spuParameters: [],
+  fullReductionList: [],
+  skuList: [],
+  specNameList: [],
+  coverImg: null,
+  sale: null,
+  hotGoodsList: []
+}
+
+const defaultShopGoodsParam = {
+  id: null,
+  name: null,
+  avatar: null,
+  newGoodsList: [],
+  hotGoodsList: []
+}
+
 export default {
   name: 'GoodsDetail',
   beforeRouteEnter (to, from, next) {
@@ -35,18 +58,26 @@ export default {
     next()
   },
   created () {
-    this.loadGoodsInfo()
+    this.isLoading = false
+    this.id = this.$route.query.id
+    getGoodsDetail({id: this.id}).then(response => {
+      this.goodsParam = response.data
+      this.shopId = this.goodsParam.shop.id
+      fetchShopGoodsInfo({id: this.shopId}).then(response => {
+        this.shopGoodsParam = response.data
+        this.$set(this.goodsParam, 'hotGoodsList', this.shopGoodsParam.hotGoodsList)
+      })
+    })
   },
   data () {
     return {
+      id: null,
+      isLoading: true,
+      shopId: null,
+      goodsParam: Object.assign({}, defaultGoodsParam),
+      shopGoodsParam: Object.assign({}, defaultShopGoodsParam),
       tagsColor: [ 'blue', 'green', 'red', 'yellow' ]
     }
-  },
-  methods: {
-    ...mapActions(['loadGoodsInfo'])
-  },
-  computed: {
-    ...mapState(['goodsInfo', 'isLoading'])
   },
   components: {
     Search,
@@ -54,8 +85,7 @@ export default {
     GoodsDetailNav,
     ShowGoods,
     ShowGoodsDetail
-  },
-  store
+  }
 }
 </script>
 

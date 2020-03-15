@@ -1,28 +1,30 @@
 <template>
   <div>
-    <ShopHeader></ShopHeader>
+    <ShopHeader
+      v-model="shopGoodsParam"
+    ></ShopHeader>
     <div class="goods-container">
       <div class="goods-list">
-        <div class="goods-show-info" v-for="(item, index) in orderGoodsList" :key="index">
+        <div class="goods-show-info" v-for="(item, index) in goodsList" :key="index">
           <div class="goods-show-img">
-            <router-link to="/goodsDetail"><img :src="item.img"/></router-link>
+            <router-link :to="{path:'/goodsDetail', query:{ id: item.id}}"><img :src="item.coverImg"/></router-link>
           </div>
           <div class="goods-show-price">
             <span>
               <Icon type="social-yen text-danger"></Icon>
-              <span class="seckill-price text-danger">{{item.price}}</span>
+              <span class="seckill-price text-danger">￥{{item.minPrice.toFixed(2)}}</span>
             </span>
           </div>
           <div class="goods-show-detail">
-            <span>{{item.intro}}</span>
+            <span>{{item.name}}</span>
           </div>
           <div class="goods-show-num">
-            已有<span>{{item.remarks}}</span>人评价
+            已有<span>{{item.sale}}</span>人购买
           </div>
         </div>
       </div>
       <div class="goods-page">
-        <Page :total="100" show-sizer></Page>
+        <Page :total="total" :current="listQuery.pageNum" :page-size="listQuery.pageSize" @change="handlePageChange()"></Page>
       </div>
     </div>
   </div>
@@ -30,23 +32,54 @@
 
 <script>
 import ShopHeader from '@/components/header/ShopHeader'
-import store from '@/vuex/store'
-import { mapGetters, mapActions } from 'vuex'
+import {fetchGoodsList} from '@/api/goods'
+import {fetchShopGoodsInfo} from '@/api/shop'
+const defaultShopGoodsParam = {
+  id: null,
+  name: null,
+  avatar: null,
+  newGoodsList: [],
+  hotGoodsList: []
+}
 export default {
   name: 'Merchant',
   created () {
-    this.loadGoodsList()
+    this.listQuery.shopId = this.$route.query.id
+    this.getGoodsList()
+    this.getShopGoods()
   },
-  computed: {
-    ...mapGetters(['orderGoodsList'])
+  data () {
+    return {
+      listQuery: {
+        pageNum: 1,
+        pageSize: 20,
+        shopId: null
+      },
+      goodsList: [],
+      total: null,
+      shopGoodsParam: Object.assign({}, defaultShopGoodsParam)
+    }
   },
   methods: {
-    ...mapActions(['loadGoodsList'])
+    getGoodsList () {
+      fetchGoodsList(this.listQuery).then(response => {
+        this.goodsList = response.data.records
+        this.total = response.data.total
+      })
+    },
+    getShopGoods () {
+      fetchShopGoodsInfo({id: this.listQuery.shopId}).then(response => {
+        this.shopGoodsParam = response.data
+      })
+    },
+    handlePageChange (i) {
+      this.listQuery.pageNum = i
+      this.getGoodsList()
+    }
   },
   components: {
     ShopHeader
-  },
-  store
+  }
 }
 </script>
 
@@ -74,6 +107,16 @@ export default {
   margin: 15px 0px;
   border: 1px solid #fff;
   cursor: pointer
+}
+.goods-show-img {
+  width: 220px;
+  height: 220px;
+  margin: 0px auto
+}
+
+.goods-show-img img {
+  width: 100%;
+  height: 100%;
 }
 .goods-show-info:hover{
   border: 1px solid #ccc;
