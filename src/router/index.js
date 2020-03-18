@@ -143,6 +143,11 @@ export const constantRouterMap = [
     path: '/merchant',
     name: 'Merchant',
     component: Merchant
+  },
+  {
+    path: '/shoppingCart', // 详情
+    name: 'ShoppingCart',
+    component: ShoppingCart
   }
 ]
 

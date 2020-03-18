@@ -80,7 +80,7 @@
         <div class="add-buy-car-box">
           <div class="add-buy-car">
             <InputNumber :min="1" v-model="count" size="large"></InputNumber>
-            <Button type="error" size="large" @click="addShoppingCartBtn()">加入购物车</Button>
+            <Button type="error" size="large" @click="addShoppingCart()">加入购物车</Button>
             <span class="item-price-title" v-if="this.selectedSku !== null">&nbsp;&nbsp;&nbsp;&nbsp;库存{{this.selectedSku.stock}}件</span>
           </div>
         </div>
@@ -89,6 +89,7 @@
   </div>
 </template>
 <script>
+import {addCart} from '@/api/cart'
 export default {
   name: 'ShowGoods',
   props: {
@@ -141,9 +142,7 @@ export default {
         }
       }
       let skuName = selectSkuNameArray.join('_')
-      console.log('skuName=' + skuName)
       this.selectedSku = this.getSkuByName(skuName)
-      console.log('this.selectedSku' + JSON.stringify(this.selectedSku))
     },
     getSkuByName (skuName) {
       for (let i = 0; i < this.value.skuList.length; i++) {
@@ -156,7 +155,16 @@ export default {
       this.bigImg = item
       this.imgIndex = index
     },
-    addShoppingCartBtn () {
+    addShoppingCart () {
+      addCart({skuId: this.selectedSku.id, quantity: this.count}).then(response => {
+        let res = response.data
+        if (res) {
+          this.$Message.success('添加成功！')
+          this.$router.push('/shoppingCart')
+        } else {
+          this.$Message.error('添加失败！')
+        }
+      })
     },
 
     flashTimeUpdate () {

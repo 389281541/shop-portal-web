@@ -36,59 +36,59 @@ export const SET_EAT_INFO = (state, eat) => {
 }
 
 // 减少秒杀时间
-export const REDUCE_SECKILLS_TIME = state => {
-  state.seckills.deadline.seconds--
-  if (state.seckills.deadline.seconds === -1) {
-    state.seckills.deadline.seconds = 59
-    state.seckills.deadline.minute--
-    if (state.seckills.deadline.minute === -1) {
-      state.seckills.deadline.minute = 59
-      state.seckills.deadline.hour--
-    }
-  }
-}
+// export const REDUCE_SECKILLS_TIME = state => {
+//   state.seckills.deadline.seconds--
+//   if (state.seckills.deadline.seconds === -1) {
+//     state.seckills.deadline.seconds = 59
+//     state.seckills.deadline.minute--
+//     if (state.seckills.deadline.minute === -1) {
+//       state.seckills.deadline.minute = 59
+//       state.seckills.deadline.hour--
+//     }
+//   }
+// }
 
 // 设置商品列表(搜索)
-export const SET_GOODS_LIST = (state, data) => {
-  state.goodsList = data.goodsList
-  state.asItems = data.asItems
-}
+// export const SET_GOODS_LIST = (state, data) => {
+//   state.goodsList = data.goodsList
+//   state.asItems = data.asItems
+// }
 
 // 设置商品列表排序
-export const SET_GOODS_ORDER_BY = (state, data) => {
-  state.orderBy = data
-}
+// export const SET_GOODS_ORDER_BY = (state, data) => {
+//   state.orderBy = data
+// }
 
 // 设置商品详细信息
-export const SET_GOODS_INFO = (state, data) => {
-  state.goodsInfo = data
-}
+// export const SET_GOODS_INFO = (state, data) => {
+//   state.goodsInfo = data
+// }
 
 // 添加购物车
-export const ADD_SHOPPING_CART = (state, data) => {
-  const item = {
-    goods_id: data.goods_id,
-    count: data.count,
-    img: data.package.img,
-    package: data.package.intro,
-    price: data.package.price,
-    title: data.title
-  }
-  state.shoppingCart.push(item)
-  state.newShoppingCart = data
-}
+// export const ADD_SHOPPING_CART = (state, data) => {
+//   const item = {
+//     goods_id: data.goods_id,
+//     count: data.count,
+//     img: data.package.img,
+//     package: data.package.intro,
+//     price: data.package.price,
+//     title: data.title
+//   }
+//   state.shoppingCart.push(item)
+//   state.newShoppingCart = data
+// }
 
 // 设置购物车信息
-export const SET_SHOPPING_CART = (state, data) => {
-  state.shoppingCart = data
-}
+// export const SET_SHOPPING_CART = (state, data) => {
+//   state.shoppingCart = data
+// }
 
 // 设置推荐信息
-export const SET_RECOMMEND_INFO = (state, data) => {
-  state.recommend = data
-}
+// export const SET_RECOMMEND_INFO = (state, data) => {
+//   state.recommend = data
+// }
 
 // 设置收获地址
-export const SET_USER_ADDRESS = (state, data) => {
-  state.address = data
-}
+// export const SET_USER_ADDRESS = (state, data) => {
+//   state.address = data
+// }

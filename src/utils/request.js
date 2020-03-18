@@ -1,6 +1,6 @@
 import axios from 'axios'
 // import router from '@/router'
-import { Message, MessageBox } from 'element-ui'
+import {Message, MessageBox} from 'element-ui'
 import store from '@/vuex/store'
 import { getToken } from '@/utils/auth'
 
@@ -32,17 +32,7 @@ service.interceptors.response.use(
     const res = response.data
     console.log('res=' + res.code)
     if (res.code !== 0) {
-      // // 未登录，跳转到登录页
-      // if (res.code === 201500) {
-      //   router.push('/login')
-      //   return response
-      // }
-      Message({
-        message: res.message,
-        type: 'error',
-        duration: 3 * 1000
-      })
-
+      alert(res.message)
       // 401:未登录
       if (res.code === 401 || res.code === 403) {
         MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
@@ -70,5 +60,4 @@ service.interceptors.response.use(
     return Promise.reject(error)
   }
 )
-
 export default service

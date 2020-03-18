@@ -22,11 +22,9 @@
             <DropdownMenu slot="list">
                 <div class="my-page">
                   <div class="my-info" @click="myInfo">
-<!--                    <Icon type="home"></Icon>-->
                     <p>我的主页</p>
                   </div>
                   <div class="sign-out" @click="signOutFun">
-<!--                    <Icon type="log-out"></Icon>-->
                     <p>退出登录</p>
                   </div>
                 </div>
@@ -39,29 +37,25 @@
               <Icon type="ios-cart-outline"></Icon> 购物车
             </a>
             <DropdownMenu slot="list">
-              <div class="shopping-cart-null" v-show="shoppingCart.length <= 0">
+              <div class="shopping-cart-null" v-show="cartList.length <= 0">
                 <Icon type="ios-cart-outline" class="cart-null-icon"></Icon>
                 <span>你的购物车没有空空哦</span>
                 <span>赶快去添加商品吧~</span>
               </div>
-              <div class="shopping-cart-list" v-show="shoppingCart.length > 0">
-                <div class="shopping-cart-box" v-for="(item,index) in shoppingCart" :key="index">
+              <div class="shopping-cart-list" v-show="cartList.length > 0">
+                <div class="shopping-cart-box" v-for="(item,index) in cartList" v-if="index < 6" :key="index">
                   <div class="shopping-cart-img">
-                    <img :src="item.img">
+                    <img :src="item.coverImg">
                   </div>
                   <div class="shopping-cart-info">
                     <div class="shopping-cart-title">
-                      <p>{{item.title.substring(0, 22)}}...</p>
+                      <p>{{item.spuName.substring(0, 22)}}...</p>
                     </div>
                     <div class="shopping-cart-detail">
                       <p>
-                        套餐:
-                        <span class="shopping-cart-text">
-                          {{item.package}}
-                        </span>
                         数量:
                         <span class="shopping-cart-text">
-                          {{item.count}}
+                          {{item.quantity}}
                         </span>
                         价钱:
                         <span class="shopping-cart-text">
@@ -72,8 +66,8 @@
                   </div>
                 </div>
                 <div class="go-to-buy">
-                  <Button type="error" size="small" @click="goToPay">
-                    去结账
+                  <Button type="error" size="small" @click="goToCart">
+                    查看我的购物车
                   </Button>
                 </div>
               </div>
@@ -91,24 +85,28 @@
 <script>
 import store from '@/vuex/store'
 import { mapState, mapActions } from 'vuex'
+import {fetchCartList} from '@/api/cart'
+
 export default {
   name: 'M-Header',
   created () {
     this.avatar = 'https://image.songshupinpin.com/16075df01ef640a6b0755ab8d90d316f'
     this.isLogin()
+    this.getCartList()
   },
   data () {
     return {
-      avatar: null
+      avatar: null,
+      cartList: []
     }
   },
   computed: {
-    ...mapState(['userInfo', 'shoppingCart'])
+    ...mapState(['userInfo'])
   },
   methods: {
     ...mapActions(['logout', 'isLogin']),
-    goToPay () {
-      this.$router.push('/order')
+    goToCart () {
+      this.$router.push('/shoppingCart')
     },
     myInfo () {
       this.$router.push('/home')
@@ -116,6 +114,11 @@ export default {
     signOutFun () {
       this.logout().then(response => {
         this.$router.push('/')
+      })
+    },
+    getCartList () {
+      fetchCartList().then(response => {
+        this.cartList = response.data
       })
     }
   },
