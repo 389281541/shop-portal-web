@@ -14,8 +14,8 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(item,index) in cartList" :key="index">
-          <td class="col1"><a href=""><img :src="item.coverImg" alt=""/></a><strong><router-link :to="{path:'/goodsDetail', query:{ id: item.spuId}}">{{item.spuName}}</router-link></strong>
+        <tr v-for="(item,index) in cartList" :data="cartList" :key="index">
+          <td class="col1"><a href="javascript:void(0);"><img :src="item.coverImg" alt=""/></a><strong><router-link :to="{path:'/goodsDetail', query:{ id: item.spuId}}">{{item.spuName}}</router-link></strong>
           </td>
           <td class="col2"><p v-for="(spec,index) in handleSpec(item.skuSpec)" :key="index">{{spec}}</p>
           </td>
@@ -26,7 +26,7 @@
             <a href="javascript:;" @click="addCount(index)" class="add_num"></a>
           </td>
           <td class="col5">￥<span>{{(item.price*item.quantity).toFixed(2)}}</span></td>
-          <td class="col6"><a href="" @click="remove(index)">删除</a></td>
+          <td class="col6"><a href="javascript:void(0);" @click="remove(index)">删除</a></td>
         </tr>
         </tbody>
         <tfoot>
@@ -112,8 +112,9 @@ export default {
       this.calculateTotal()
     },
     remove (index) {
-      removeCart({id: this.cartList[index].id})
-      this.calculateTotal()
+      removeCart({id: this.cartList[index].id}).then(() => {
+        this.getCartList()
+      })
     },
     calculateTotal () {
       let total = 0

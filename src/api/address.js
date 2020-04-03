@@ -40,11 +40,10 @@ export function removeAddress (data) {
   })
 }
 
-export function listAddress (data) {
+export function listAddress () {
   return request({
     url: '/customerAddress/list',
-    method: 'post',
-    data: data
+    method: 'post'
   })
 }
 

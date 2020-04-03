@@ -4,25 +4,20 @@
     <!-- 主体部分 start -->
     <div class='fillin w990 bc mt15'>
       <div class='fillin_hd'>
-        <h2>填写并核对订单信息</h2>
+        <h2>确认订单信息</h2>
       </div>
       <div class='fillin_bd'>
         <!-- 收货人信息  start-->
         <div class='address'>
           <h3>收货人信息 <a href='javascript:;' id='address_modify' v-show="isAddressModify" @click="modifyAddress">[修改]</a></h3>
           <div class='address_info' v-show="isAddressModify">
-            <p>王超平 13555555555 </p>
-            <p>北京 昌平区 西三旗 建材城西路金燕龙办公楼一层 </p>
+            <p>{{selectAddress.receiverName}}&nbsp;&nbsp;{{selectAddress.phone}}</p>
+            <p>{{selectAddress.province}}&nbsp;&nbsp;{{selectAddress.city}}&nbsp;&nbsp;{{selectAddress.district}}&nbsp;&nbsp;{{selectAddress.address}}</p>
           </div>
           <div class='address_select' v-show="!isAddressModify">
             <ul>
-              <li class='cur'>
-                <input type='radio' name='address' checked='checked'/>王超平 北京市 昌平区 建材城西路金燕龙办公楼一层 13555555555
-                <a href=''>设为默认地址</a>
-              </li>
-              <li>
-                <input type='radio' name='address'/>王超平 湖北省 武汉市 武昌 关山光谷软件园1号201 13333333333
-                <a href=''>设为默认地址</a>
+              <li :class="{'cur':index === selectedAddressIndex}" v-for="(item, index) in confirmOrder.customerAddressList" :key="index">
+                <input type='radio' name='address' @click="handleChangeAddress(index)" :checked='index === selectedAddressIndex'/>{{item.receiverName}}&nbsp;&nbsp;{{item.province}}&nbsp;&nbsp;{{item.city}}&nbsp;&nbsp;{{item.district}}&nbsp;&nbsp;{{item.address}}&nbsp;&nbsp;{{item.phone}}
               </li>
               <a href='javascript:void(0);' class='confirm_btn' @click="confirmAddress()"><span>确认收货地址</span></a>
             </ul>
@@ -33,8 +28,7 @@
         <div class='delivery'>
           <h3>送货方式 <a href='javascript:;' id='delivery_modify' @click="modifyDelivery()"  v-show="isDeliveryModify">[修改]</a></h3>
           <div class='delivery_info' v-show="isDeliveryModify">
-            <p>普通快递送货上门</p>
-            <p>送货时间不限</p>
+            <p>{{selectDeliverMode.label}}</p>
           </div>
           <div class='delivery_select' v-show="!isDeliveryModify">
             <table>
@@ -46,32 +40,10 @@
               </tr>
               </thead>
               <tbody>
-              <tr class='cur'>
-                <td>
-                  <input type='radio' name='delivery' checked='checked'/>普通快递送货上门
-                  <select name='' id=''>
-                    <option value=''>时间不限</option>
-                    <option value=''>工作日，周一到周五</option>
-                    <option value=''>周六日及公众假期</option>
-                  </select>
-                </td>
-                <td>￥10.00</td>
-                <td>每张订单不满499.00元,运费15.00元, 订单4...</td>
-              </tr>
-              <tr>
-                <td><input type='radio' name='delivery'/>特快专递</td>
-                <td>￥40.00</td>
-                <td>每张订单不满499.00元,运费40.00元, 订单4...</td>
-              </tr>
-              <tr>
-                <td><input type='radio' name='delivery'/>加急快递送货上门</td>
-                <td>￥40.00</td>
-                <td>每张订单不满499.00元,运费40.00元, 订单4...</td>
-              </tr>
-              <tr>
-                <td><input type='radio' name='delivery'/>平邮</td>
-                <td>￥10.00</td>
-                <td>每张订单不满499.00元,运费15.00元, 订单4...</td>
+              <tr :class="{'cur':selectDeliverMode.value === item.value}" v-for="(item,index) in deliverModeList" :key="index">
+                <td><input type='radio' :value="item.value" name='delivery' @change="handleDeliverMode(index)" :checked='selectDeliverMode.value === item.value'/>{{item.label}}</td>
+                <td>￥{{item.fee.toFixed(2)}}</td>
+                <td>{{item.feeStandard}}</td>
               </tr>
               </tbody>
             </table>
@@ -83,25 +55,12 @@
         <div class='pay'>
           <h3>支付方式 <a href='javascript:;' id='pay_modify' @click="modifyPay" v-show="isPayModify">[修改]</a></h3>
           <div class='pay_info' v-show="isPayModify">
-            <p>货到付款</p>
+            <p>{{selelctPayMode.label}}</p>
           </div>
           <div class='pay_select' v-show="!isPayModify">
             <table>
-              <tr class='cur'>
-                <td class='col1'><input type='radio' name='pay'/>货到付款</td>
-                <td class='col2'>送货上门后再收款，支持现金、POS机刷卡、支票支付</td>
-              </tr>
-              <tr>
-                <td class='col1'><input type='radio' name='pay'/>在线支付</td>
-                <td class='col2'>即时到帐，支持绝大数银行借记卡及部分银行信用卡</td>
-              </tr>
-              <tr>
-                <td class='col1'><input type='radio' name='pay'/>上门自提</td>
-                <td class='col2'>自提时付款，支持现金、POS刷卡、支票支付</td>
-              </tr>
-              <tr>
-                <td class='col1'><input type='radio' name='pay'/>邮局汇款</td>
-                <td class='col2'>通过快钱平台收款 汇款后1-3个工作日到账</td>
+              <tr :class="{'cur':selelctPayMode.value === item.value}" v-for="(item, index) in payModeList" :key="index">
+                <td class='col1'><input type='radio' @change="handelPayMode(index)" :checked='selelctPayMode.value === item.value' :value="item.value" name='pay'/>{{item.label}}</td>
               </tr>
             </table>
             <a href='javascript:void(0);' class='confirm_btn' @click="confirmPay"><span>确认支付方式</span></a>
@@ -122,23 +81,13 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-              <td class='col1'><a href=''><img src='../../static/img/cart_goods1.jpg' alt=''/></a> <strong><a href=''>【1111购物狂欢节】惠JackJones杰克琼斯纯羊毛菱形格</a></strong>
+            <tr v-for="(item, index) in confirmOrder.cartPromotionList" :key="index">
+              <td class='col1'><a href="javascript:void(0);"><img :src="item.coverImg" alt=''/></a> <strong><router-link :to="{path:'/goodsDetail', query:{ id: item.spuId}}">{{item.spuName}}</router-link></strong>
               </td>
-              <td class='col2'><p>颜色：073深红</p>
-                <p>尺码：170/92A/S</p></td>
-              <td class='col3'>￥499.00</td>
-              <td class='col4'> 1</td>
-              <td class='col5'><span>￥499.00</span></td>
-            </tr>
-            <tr>
-              <td class='col1'><a href=''><img src='../../static/img/cart_goods2.jpg' alt=''/></a> <strong><a href=''>九牧王王正品新款时尚休闲中长款茄克EK01357200</a></strong>
-              </td>
-              <td class='col2'><p>颜色：淡蓝色</p>
-                <p>尺码：165/88</p></td>
-              <td class='col3'>￥1102.00</td>
-              <td class='col4'>1</td>
-              <td class='col5'><span>￥1102.00</span></td>
+              <td class='col2'><p v-for="(spec,index) in handleSpec(item.skuSpec)" :key="index">{{spec}}</p></td>
+              <td class='col3'>￥{{item.price.toFixed(2)}}</td>
+              <td class='col4'>{{item.quantity}}</td>
+              <td class='col5'><span>￥{{(item.price*item.quantity).toFixed(2)}}</span></td>
             </tr>
             </tbody>
             <tfoot>
@@ -146,16 +95,30 @@
               <td colspan='5'>
                 <ul>
                   <li>
-                    <span>4 件商品，总商品金额：</span>
-                    <em>￥5316.00</em>
+                    <span>{{totalQuantity}}件商品，总商品金额：</span>
+                    <em>￥{{totalAmount.toFixed(2)}}</em>
+                  </li>
+                  <br/>
+                  <li>
+                    <span>促销优惠：</span>
+                    <em>-￥{{totalPromotionAmount.toFixed(2)}}</em>
                   </li>
                   <li>
-                    <span>优惠总额：</span>
-                    <em>-￥240.00</em>
+                    <span>
+                      <select style="font-size:12px; color:#666666">
+                        <option value="0">不使用优惠券</option>
+                      <option :value ="item.amount" v-for="(item, index) in confirmOrder.couponList" :key="index">{{item.name}}</option>
+                      </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;优惠券：</span>
+                    <em>-￥{{couponAmount.toFixed(2)}}</em>
+                  </li>
+                  <br/>
+                  <li>
+                    <input type="checkbox" class="integration" :value="useIntegration" @change="handleIntegration"/><span style="font-size:12px; color:#666666; margin-bottom: 5px">使用{{confirmOrder.recommendIntegration}}积分</span>&nbsp;&nbsp;&nbsp;&nbsp;积分抵扣：
+                    <em>-￥{{totalIntegrationAmount.toFixed(2)}}</em>
                   </li>
                   <li>
                     <span>运费：</span>
-                    <em>￥10.00</em>
+                    <em>￥{{deliverAmount.toFixed(2)}}</em>
                   </li>
                   <li>
                     <span>应付总额：</span>
@@ -170,7 +133,7 @@
         <!-- 商品清单 end -->
       </div>
       <div class='fillin_ft'>
-        <a href=''><span>提交订单</span></a>
+        <a href=''><span @click="submit">提交订单</span></a>
         <p>应付总额：<strong>￥5076.00元</strong></p>
       </div>
     </div>
@@ -181,20 +144,92 @@
 <script>
 import Search from '@/components/Search'
 import GoodsListNav from '@/components/nav/GoodsListNav'
+import {generateConfirmOrder, generateOrder} from '@/api/order'
+const defaultConfirmOrder = {
+  totalAmount: null,
+  deliverAmount: null,
+  promotionAmount: null,
+  payAmount: null,
+  integrationRuleSetting: null,
+  cartPromotionList: [],
+  customerAddressList: [],
+  couponList: []
+}
+const defaultGenrateOrderParam = {
+  couponId: null,
+  addressId: null,
+  payType: null,
+  deliverMode: null,
+  useIntegration: null
+}
 export default {
   name: 'Order',
   created () {
+    this.generateConfirmOrder()
+    this.selectDeliverMode = this.deliverModeList[0]
+    this.selelctPayMode = this.payModeList[0]
   },
   data () {
     return {
       isAddressModify: true,
       isDeliveryModify: true,
-      isPayModify: true
+      isPayModify: true,
+      selectedAddressIndex: null,
+      selectAddress: null,
+      selectDeliverMode: null,
+      selelctPayMode: null,
+      confirmOrder: Object.assign({}, defaultConfirmOrder),
+      genrateOrderParam: Object.assign({}, defaultGenrateOrderParam),
+      totalQuantity: null,
+      totalAmount: null,
+      totalPromotionAmount: null,
+      totalIntegrationAmount: null,
+      useIntegration: false,
+      deliverAmount: null,
+      couponAmount: 0,
+      deliverModeList: [
+        {
+          value: 0,
+          label: '快递',
+          fee: 0.00,
+          feeStandard: '免费发顺丰、中通、圆通、申通、百世和韵达'
+        },
+        {
+          value: 1,
+          label: '中国邮政',
+          fee: 20.00,
+          feeStandard: '全国统一价'
+        }
+      ],
+      payModeList: [
+        {
+          value: 0,
+          label: '支付宝'
+        },
+        {
+          value: 1,
+          label: '微信'
+        },
+        {
+          value: 2,
+          label: '货到付款'
+        }
+      ]
     }
   },
   computed: {
   },
   methods: {
+    generateConfirmOrder () {
+      generateConfirmOrder().then(response => {
+        this.confirmOrder = response.data
+        this.getDefaultAddress()
+        this.calculteTotalAmount()
+        this.totalIntegrationAmount = this.confirmOrder.recommendIntegration / 100.0
+        this.deliverAmount = 0
+        this.couponAmount = 0
+      })
+    },
     modifyAddress () {
       this.isAddressModify = false
     },
@@ -213,6 +248,70 @@ export default {
     },
     confirmPay () {
       this.isPayModify = true
+    },
+    getDefaultAddress () {
+      for (let i = 0; i < this.confirmOrder.customerAddressList.length; i++) {
+        if (this.confirmOrder.customerAddressList[i].isDefault === 1) {
+          this.selectedAddressIndex = i
+          this.selectAddress = this.confirmOrder.customerAddressList[i]
+        }
+      }
+    },
+    handleChangeAddress (index) {
+      this.selectedAddressIndex = index
+      this.selectAddress = this.confirmOrder.customerAddressList[index]
+    },
+    handleDeliverMode (index) {
+      this.selectDeliverMode = this.deliverModeList[index]
+      if (index === 0) {
+        this.deliverAmount = 0
+      } else {
+        this.deliverAmount = 20
+      }
+    },
+    handelPayMode (index) {
+      this.selelctPayMode = this.payModeList[index]
+    },
+    handleSpec (value) {
+      if (value === null) {
+        return []
+      } else {
+        let attr = JSON.parse(value)
+        let result = []
+        for (let i = 0; i < attr.length; i++) {
+          let temp = ''
+          temp += attr[i].key
+          temp += ':'
+          temp += attr[i].value
+          temp += ''
+          result.push(temp)
+        }
+        return result
+      }
+    },
+    submit () {
+      generateOrder(this.genrateOrderParam)
+    },
+    calculteTotalAmount () {
+      let quantity = 0
+      let totalPrice = 0
+      let totalPromotion = 0
+      for (let i = 0; i < this.confirmOrder.cartPromotionList.length; i++) {
+        quantity += this.confirmOrder.cartPromotionList[i].quantity
+        totalPrice += this.confirmOrder.cartPromotionList[i].quantity * this.confirmOrder.cartPromotionList[i].price
+        totalPromotion += this.confirmOrder.cartPromotionList[i].perReduceAmount * this.confirmOrder.cartPromotionList[i].quantity
+      }
+      this.totalQuantity = quantity
+      this.totalAmount = totalPrice
+      this.totalPromotionAmount = Math.ceil(totalPromotion)
+    },
+    handleIntegration () {
+      this.useIntegration = !this.useIntegration
+      if (this.useIntegration) {
+        this.totalIntegrationAmount = this.confirmOrder.recommendIntegration / 100.0
+      } else {
+        this.totalIntegrationAmount = 0
+      }
     }
   },
   components: {
@@ -449,7 +548,7 @@ input[type='radio'] {
 }
 .goods tfoot li em {
   display: inline-block;
-  width: 50px;
+  width: 70px;
   text-align: right;
 }
 .fillin_ft {
@@ -496,5 +595,8 @@ ul, ol, li, dl, dt, dd {
 }
 .order_info {
   font-size: 14px;
+}
+.integration {
+  vertical-align: middle;
 }
 </style>
