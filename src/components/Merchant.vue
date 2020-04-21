@@ -87,7 +87,7 @@ export default {
 .text-danger {
   color: #A94442
 }
-.seckill-price{
+.seckill-price {
   margin-right: 5px;
   font-size: 25px;
   font-weight: bold
@@ -101,7 +101,7 @@ export default {
   flex-wrap: wrap;
   justify-content: space-between
 }
-.goods-show-info{
+.goods-show-info {
   width: 240px;
   padding: 10px;
   margin: 15px 0px;
@@ -122,19 +122,19 @@ export default {
   border: 1px solid #ccc;
   box-shadow: 0px 0px 15px #ccc
 }
-.goods-show-price{
+.goods-show-price {
   margin-top: 6px
 }
-.goods-show-detail{
+.goods-show-detail {
   font-size: 12px;
   margin: 6px 0px
 }
-.goods-show-num{
+.goods-show-num {
   font-size: 12px;
   margin-bottom: 6px;
   color: #009688
 }
-.goods-show-num span{
+.goods-show-num span {
   color: #005AA0;
   font-weight: bold
 }

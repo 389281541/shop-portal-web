@@ -38,6 +38,9 @@ const defaultGoodsParam = {
   fullReductionList: [],
   skuList: [],
   specNameList: [],
+  flashSpuInfo: {
+    hms: {}
+  },
   coverImg: null,
   sale: null,
   hotGoodsList: []

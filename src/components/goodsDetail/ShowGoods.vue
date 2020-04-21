@@ -16,21 +16,21 @@
           <p>
             <span class="item-detail-express">包邮配送</span> {{value.name}}</p>
         </div>
-        <div class="seckill-head" v-if="value.promotionType === 1 || flashType === 1">
+        <div class="seckill-head" v-show="value.flashSpuInfo.flashFlag===1">
           <div class="seckill-icon">
             <img src="static/img/index/clock.png">
           </div>
           <div class="seckill-text">
-            <span v-if="flashType === 1" class="seckill-title">限时秒杀</span>
-            <span v-else-if="flashType === 0" class="seckill-title">限时促销</span>
+            <span class="seckill-title">限时秒杀</span>
           </div>
           <div class="count-down">
-            <span class="count-down-text">距离结束</span>
-            <span class="count-down-num count-down-hour">{{killTime.hour}}</span>
+            <span class="count-down-text" v-show="value.flashSpuInfo.flashStatus===0">距离开始</span>
+            <span class="count-down-text" v-show="value.flashSpuInfo.flashStatus===1">距离结束</span>
+            <span class="count-down-num count-down-hour">{{this.zeroize(value.flashSpuInfo.hms.hour)}}</span>
             <span class="count-down-point">:</span>
-            <span class="count-down-num count-down-minute">{{killTime.minute}}</span>
+            <span class="count-down-num count-down-minute">{{this.zeroize(value.flashSpuInfo.hms.minute)}}</span>
             <span class="count-down-point">:</span>
-            <span class="count-down-num count-down-seconds">{{killTime.seconds}}</span>
+            <span class="count-down-num count-down-seconds">{{this.zeroize(value.flashSpuInfo.hms.second)}}</span>
           </div>
         </div>
         <div class="item-detail-price-row">
@@ -38,16 +38,23 @@
             <div class="item-price-row">
               <p>
                 <span class="item-price-title">价&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;格</span>
-                <span class="item-price" v-if="this.selectedSku !== null">￥{{this.selectedSku.originalPrice.toFixed(2)}}</span>
+                <span class="item-price" v-if="(value.promotionType===1 && this.selectedSku !== null) || value.flashSpuInfo.flashFlag===1">￥{{this.selectedSku.originalPrice.toFixed(2)}}</span>
+                <span class="item-promotion-price" v-if="value.promotionType!==1 && value.flashSpuInfo.flashFlag===0 && this.selectedSku !== null">￥{{this.selectedSku.price.toFixed(2)}}</span>
               </p>
             </div>
-            <div class="item-price-row">
+            <div class="item-price-row" v-show="value.promotionType===1 && value.flashSpuInfo.flashFlag===0">
               <p>
                 <span class="item-price-title">促&nbsp;销&nbsp;价</span>
                 <span class="item-promotion-price" v-if="this.selectedSku !== null">￥{{this.selectedSku.price.toFixed(2)}}</span>
               </p>
             </div>
-            <div class="item-price-row">
+            <div class="item-price-row" v-show="value.flashSpuInfo.flashFlag===1">
+              <p>
+                <span class="item-price-title">秒&nbsp;杀&nbsp;价</span>
+                <span class="item-promotion-price" v-if="this.selectedSku !== null">￥{{(this.selectedSku.originalPrice - value.flashSpuInfo.flashDiscountPrice).toFixed(2)}}</span>
+              </p>
+            </div>
+            <div class="item-price-row" v-show="value.promotionType===2">
               <p>
                 <span class="item-price-title">满&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;减</span>
                 <span class="item-price-full-cut" v-for="(item,index) in value.fullReductionList" :key="index">满{{item.fullPrice}}减{{item.reducePrice}}</span>
@@ -56,9 +63,18 @@
           </div>
           <div class="item-price-right">
             <div class="item-remarks-sum">
+              <p>限购</p>
+              <p  v-show="value.flashSpuInfo.flashFlag===0">
+                <span class="item-remarks-num">{{value.promotionPerLimit}}件</span>
+              </p>
+              <p  v-show="value.flashSpuInfo.flashFlag===1">
+                <span class="item-remarks-num">{{value.flashSpuInfo.flashPromotionLimit}}</span>
+              </p>
+            </div>
+            <div class="item-remarks-sum">
               <p>销量</p>
               <p>
-                <span class="item-remarks-num">{{value.sale}}</span>
+                <span class="item-remarks-num">{{value.sale}}件</span>
               </p>
             </div>
           </div>
@@ -78,10 +94,15 @@
         </div>
         <br>
         <div class="add-buy-car-box">
-          <div class="add-buy-car">
+          <div class="add-buy-car"  v-show="value.flashSpuInfo.flashFlag===0">
             <InputNumber :min="1" v-model="count" size="large"></InputNumber>
             <Button type="error" size="large" @click="addShoppingCart()">加入购物车</Button>
-            <span class="item-price-title" v-if="this.selectedSku !== null">&nbsp;&nbsp;&nbsp;&nbsp;库存{{this.selectedSku.stock}}件</span>
+            <span class="item-price-title" v-if="this.selectedSku !== null">&nbsp;&nbsp;&nbsp;&nbsp;库存{{this.selectedSku.stock - this.selectedSku.lockStock}}件</span>
+          </div>
+          <div class="add-buy-car"  v-show="value.flashSpuInfo.flashFlag===1">
+            <InputNumber :min="1" v-model="count" size="large"></InputNumber>
+            <Button type="error" size="large" @click="doFlash()" :disabled="value.flashSpuInfo.flashStatus===0">立即秒杀</Button>
+            <span class="item-price-title" v-if="this.selectedSku !== null">&nbsp;&nbsp;&nbsp;&nbsp;库存{{value.flashSpuInfo.flashPromotionNum - this.selectedSku.lockStock}}件</span>
           </div>
         </div>
       </div>
@@ -90,6 +111,7 @@
 </template>
 <script>
 import {addCart} from '@/api/cart'
+import {goConfirmOrder} from '@/api/flash'
 export default {
   name: 'ShowGoods',
   props: {
@@ -112,16 +134,10 @@ export default {
     return {
       price: 0,
       count: 1,
-      flashType: 0,
       selectBoxIndex: 0,
       imgIndex: 0,
       selectedSku: null,
       bigImg: null,
-      killTime: {
-        seconds: 0,
-        minute: 0,
-        hour: 10
-      },
       setIntervalObj: null,
       selectAttrMap: {}
     }
@@ -166,23 +182,31 @@ export default {
         }
       })
     },
-
+    doFlash () {
+      goConfirmOrder({skuId: this.selectedSku.id, quantity: this.count, flashPrice: this.selectedSku.originalPrice - this.value.flashSpuInfo.flashDiscountPrice}).then(response => {
+        let res = response.data
+        if (!res) {
+          this.$Message.error('秒杀失败！')
+        }
+        this.$router.push({path: '/order', query: {flashFlag: '1'}})
+      })
+    },
     flashTimeUpdate () {
-      this.killTime.seconds--
-      if (this.killTime.seconds === -1) {
-        this.killTime.seconds = 59
-        this.killTime.minute--
-        if (this.killTime.minute === -1) {
-          this.killTime.minute = 59
-          this.killTime.hour--
+      if (this.value.flashSpuInfo.hms.second === 0 && this.value.flashSpuInfo.hms.minute === 0 && this.value.flashSpuInfo.hms.hour === 0) {
+        return
+      }
+      this.value.flashSpuInfo.hms.second--
+      if (this.value.flashSpuInfo.hms.second === -1) {
+        this.value.flashSpuInfo.hms.second = 59
+        this.value.flashSpuInfo.hms.minute--
+        if (this.value.flashSpuInfo.hms.minute === -1) {
+          this.value.flashSpuInfo.hms.minute = 59
+          this.value.flashSpuInfo.hms.hour--
         }
       }
-      this.killTime.seconds = this.prefixInteger(this.killTime.seconds, 2)
-      this.killTime.minute = this.prefixInteger(this.killTime.minute, 2)
-      this.killTime.hour = this.prefixInteger(this.killTime.hour, 2)
     },
-    prefixInteger (number, length) {
-      return (Array(length).join('0') + number).slice(-length)
+    zeroize (obj) {
+      return obj < 10 ? '0' + obj : obj
     },
     handleEditCreated () {
       for (let i = 0; i < this.value.specNameList.length; i++) {

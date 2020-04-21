@@ -31,3 +31,11 @@ export function getOrderDetail (data) {
     data: data
   })
 }
+
+export function getOrderStatus (data) {
+  return request({
+    url: '/order/status',
+    method: 'post',
+    data: data
+  })
+}

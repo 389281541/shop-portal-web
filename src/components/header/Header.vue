@@ -32,7 +32,7 @@
           </Dropdown>
         </li>
         <li>
-          <Dropdown  placement="bottom-start">
+          <Dropdown placement="bottom-start" @on-visible-change="freshCartList">
             <a href="javascript:void(0)">
               <Icon type="ios-cart-outline"></Icon> 购物车
             </a>
@@ -120,6 +120,9 @@ export default {
       fetchCartList().then(response => {
         this.cartList = response.data
       })
+    },
+    freshCartList () {
+      this.getCartList()
     }
   },
   store

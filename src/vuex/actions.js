@@ -2,54 +2,23 @@ import md5 from 'js-md5'
 import {loginCustomer, logoutCustomer} from '@/api/customer'
 import {listAdvertise} from '@/api/navigation'
 import {setToken} from '@/utils/auth'
+import {fetchFlashThemeList} from '@/api/flash'
 
 // 获取秒杀数据
-export const loadSeckillsInfo = ({ commit }) => {
-  return new Promise((resolve, reject) => {
-    const data = [
-      {
-        intro: '【赠小风扇】维他 柠檬茶250ml*32盒 礼品装 整箱',
-        img: 'static/img/index/seckill/seckill-item1.jpg',
-        price: 71.9,
-        realPrice: 89.6
-      },
-      {
-        intro: 'Kindle Paperwhite 全新升级版6英寸护眼非反光电子墨水',
-        img: 'static/img/index/seckill/seckill-item2.jpg',
-        price: 989.0,
-        realPrice: 1299.0
-      },
-      {
-        intro: '粮悦 大吃兄糯米锅巴 安徽特产锅巴糯米原味400g*2盒',
-        img: 'static/img/index/seckill/seckill-item3.jpg',
-        price: 21.8,
-        realPrice: 49.0
-      },
-      {
-        intro: '【京东超市】清风（APP）抽纸 原木纯品金装系列 3层',
-        img: 'static/img/index/seckill/seckill-item4.jpg',
-        price: 49.9,
-        realPrice: 59.0
-      },
-      {
-        intro: 'NIKE耐克 男子休闲鞋 AIR MAX 90 ESSENTIAL 气垫',
-        img: 'static/img/index/seckill/seckill-item5.jpg',
-        price: 559.9,
-        realPrice: 759.9
+export const fetchFlashGoodsList = ({ commit }) => {
+  return new Promise(() => {
+    fetchFlashThemeList().then(response => {
+      let flashThemeList = response.data
+      if (flashThemeList.length === 0) {
+        return
       }
-    ]
-    const date = new Date()
-    const hours = date.getHours()
-    const minute = date.getMinutes()
-    const seconds = date.getSeconds()
-    console.log([hours, minute, seconds])
-    // 距离开始秒杀时间
-    const deadline = {
-      hours: 1,
-      minute: 38,
-      seconds: 36
-    }
-    commit('SET_SECKILLS_INFO', [data, deadline])
+      const deadline = {
+        hours: flashThemeList[0].hms.hour,
+        minute: flashThemeList[0].hms.minute,
+        seconds: flashThemeList[0].hms.second
+      }
+      commit('SET_SECKILLS_INFO', [flashThemeList, deadline])
+    })
   })
 }
 
@@ -414,251 +383,251 @@ export const loadEat = ({ commit }) => {
 // }
 
 // 获取商品列表
-export const loadGoodsList = ({ commit }) => {
-  commit('SET_LOAD_STATUS', true)
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      const data = {
-        asItems: [
-          {
-            img: 'static/img/goodsList/item-as-img-1.jpg',
-            price: 39.9,
-            intro: 'SKSK 苹果7/7plus手机壳 iPhone 7 Plus保护套全包硬',
-            num: 3140,
-            sale: 9000
-          },
-          {
-            img: 'static/img/goodsList/item-as-img-2.jpg',
-            price: 36.6,
-            intro: '狮普 苹果7/7 Plus手机壳 电镀 超薄 全包 防摔 保护外',
-            num: 6160,
-            sale: 8900
-          },
-          {
-            img: 'static/img/goodsList/item-as-img-1.jpg',
-            price: 38.6,
-            intro: 'SKSK 苹果7/7plus手机壳 iPhone 7 Plus保护套全包硬',
-            num: 9160,
-            sale: 8800
-          },
-          {
-            img: 'static/img/goodsList/item-as-img-2.jpg',
-            price: 35.6,
-            intro: '狮普 苹果7/7 Plus手机壳 电镀 超薄 全包 防摔 保护外',
-            num: 6160,
-            sale: 7990
-          },
-          {
-            img: 'static/img/goodsList/item-as-img-1.jpg',
-            price: 38.6,
-            intro: 'SKSK 苹果7/7plus手机壳 iPhone 7 Plus保护套全包硬',
-            num: 9160,
-            sale: 7600
-          },
-          {
-            img: 'static/img/goodsList/item-as-img-2.jpg',
-            price: 35.6,
-            intro: '狮普 苹果7/7 Plus手机壳 电镀 超薄 全包 防摔 保护外',
-            num: 6160,
-            sale: 6900
-          }
-        ],
-        goodsList: [
-          {
-            img: 'static/img/goodsList/item-show-1.jpg',
-            price: 36.60,
-            intro: 'SKSK 苹果7/7plus手机壳 iPhone 7 Plus保护套全包硬壳男女磨砂防摔 火影红(苹',
-            remarks: 6160,
-            shopName: '元亨利配件专营店',
-            sale: 9900
-          },
-          {
-            img: 'static/img/goodsList/item-show-2.jpg',
-            price: 28.00,
-            intro: '蒙奇奇 苹果6s手机壳磨砂防摔保护套 适用于iphone6/6s/6sPlus/6plus 6/6s 4.7英',
-            remarks: 3000,
-            shopName: 'monqiqi旗舰店',
-            sale: 9600
-          },
-          {
-            img: 'static/img/goodsList/item-show-3.jpg',
-            price: 15.00,
-            intro: 'BIAZE 苹果6/6s手机壳 苹果iphone6s 4.7英寸透明手机套 清爽系列',
-            remarks: 2800,
-            shopName: 'BIAZE官方旗舰店',
-            sale: 8900
-          },
-          {
-            img: 'static/img/goodsList/item-show-4.jpg',
-            price: 29.90,
-            intro: '慕臣 苹果6s手机壳全包防摔磨砂软保护套男女 适用于iPhone6splus',
-            remarks: 9000,
-            shopName: '歌乐力手配专营店',
-            sale: 8600
-          },
-          {
-            img: 'static/img/goodsList/item-show-5.jpg',
-            price: 15.00,
-            intro: 'BIAZE 苹果6/6s手机壳 苹果iphone6s 4.7英寸透明手机套 清爽系列',
-            remarks: 6160,
-            shopName: 'BIAZE官方旗舰店',
-            sale: 8560
-          },
-          {
-            img: 'static/img/goodsList/item-show-6.jpg',
-            price: 28.00,
-            intro: '慕臣 苹果6s手机壳全包防摔磨砂软保护套男女 适用于iPhone6splus',
-            remarks: 9006,
-            shopName: '歌乐力手配专营店',
-            sale: 8530
-          },
-          {
-            img: 'static/img/goodsList/item-show-7.jpg',
-            price: 15.00,
-            intro: 'BIAZE 苹果6/6s手机壳 苹果iphone6s 4.7英寸透明手机套 清爽系列',
-            remarks: 8666,
-            shopName: 'BIAZE官方旗舰店',
-            sale: 8360
-          },
-          {
-            img: 'static/img/goodsList/item-show-8.jpg',
-            price: 29.90,
-            intro: '慕臣 苹果6s手机壳全包防摔磨砂软保护套男女 适用于iPhone6splus',
-            remarks: 6080,
-            shopName: '歌乐力手配专营店',
-            sale: 7560
-          },
-          {
-            img: 'static/img/goodsList/item-show-1.jpg',
-            price: 36.60,
-            intro: 'SKSK 苹果7/7plus手机壳 iPhone 7 Plus保护套全包硬壳男女磨砂防摔 火影红(苹',
-            remarks: 6160,
-            shopName: '元亨利配件专营店',
-            sale: 7360
-          },
-          {
-            img: 'static/img/goodsList/item-show-2.jpg',
-            price: 28.00,
-            intro: '蒙奇奇 苹果6s手机壳磨砂防摔保护套 适用于iphone6/6s/6sPlus/6plus 6/6s 4.7英',
-            remarks: 3000,
-            shopName: 'monqiqi旗舰店',
-            sale: 6960
-          },
-          {
-            img: 'static/img/goodsList/item-show-3.jpg',
-            price: 15.00,
-            intro: 'BIAZE 苹果6/6s手机壳 苹果iphone6s 4.7英寸透明手机套 清爽系列',
-            remarks: 2800,
-            shopName: 'BIAZE官方旗舰店',
-            sale: 6560
-          },
-          {
-            img: 'static/img/goodsList/item-show-4.jpg',
-            price: 29.90,
-            intro: '慕臣 苹果6s手机壳全包防摔磨砂软保护套男女 适用于iPhone6splus',
-            remarks: 9000,
-            shopName: '歌乐力手配专营店',
-            sale: 6360
-          },
-          {
-            img: 'static/img/goodsList/item-show-5.jpg',
-            price: 15.00,
-            intro: 'BIAZE 苹果6/6s手机壳 苹果iphone6s 4.7英寸透明手机套 清爽系列',
-            remarks: 6160,
-            shopName: 'BIAZE官方旗舰店',
-            sale: 5530
-          },
-          {
-            img: 'static/img/goodsList/item-show-6.jpg',
-            price: 28.00,
-            intro: '慕臣 苹果6s手机壳全包防摔磨砂软保护套男女 适用于iPhone6splus',
-            remarks: 9006,
-            shopName: '歌乐力手配专营店',
-            sale: 5560
-          },
-          {
-            img: 'static/img/goodsList/item-show-7.jpg',
-            price: 15.00,
-            intro: 'BIAZE 苹果6/6s手机壳 苹果iphone6s 4.7英寸透明手机套 清爽系列',
-            remarks: 8666,
-            shopName: 'BIAZE官方旗舰店',
-            sale: 5260
-          },
-          {
-            img: 'static/img/goodsList/item-show-8.jpg',
-            price: 29.90,
-            intro: '慕臣 苹果6s手机壳全包防摔磨砂软保护套男女 适用于iPhone6splus',
-            remarks: 6080,
-            shopName: '歌乐力手配专营店',
-            sale: 3560
-          }
-        ]
-      }
-      commit('SET_GOODS_LIST', data)
-      commit('SET_LOAD_STATUS', false)
-    })
-  })
-}
+// export const loadGoodsList = ({ commit }) => {
+//   commit('SET_LOAD_STATUS', true)
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//       const data = {
+//         asItems: [
+//           {
+//             img: 'static/img/goodsList/item-as-img-1.jpg',
+//             price: 39.9,
+//             intro: 'SKSK 苹果7/7plus手机壳 iPhone 7 Plus保护套全包硬',
+//             num: 3140,
+//             sale: 9000
+//           },
+//           {
+//             img: 'static/img/goodsList/item-as-img-2.jpg',
+//             price: 36.6,
+//             intro: '狮普 苹果7/7 Plus手机壳 电镀 超薄 全包 防摔 保护外',
+//             num: 6160,
+//             sale: 8900
+//           },
+//           {
+//             img: 'static/img/goodsList/item-as-img-1.jpg',
+//             price: 38.6,
+//             intro: 'SKSK 苹果7/7plus手机壳 iPhone 7 Plus保护套全包硬',
+//             num: 9160,
+//             sale: 8800
+//           },
+//           {
+//             img: 'static/img/goodsList/item-as-img-2.jpg',
+//             price: 35.6,
+//             intro: '狮普 苹果7/7 Plus手机壳 电镀 超薄 全包 防摔 保护外',
+//             num: 6160,
+//             sale: 7990
+//           },
+//           {
+//             img: 'static/img/goodsList/item-as-img-1.jpg',
+//             price: 38.6,
+//             intro: 'SKSK 苹果7/7plus手机壳 iPhone 7 Plus保护套全包硬',
+//             num: 9160,
+//             sale: 7600
+//           },
+//           {
+//             img: 'static/img/goodsList/item-as-img-2.jpg',
+//             price: 35.6,
+//             intro: '狮普 苹果7/7 Plus手机壳 电镀 超薄 全包 防摔 保护外',
+//             num: 6160,
+//             sale: 6900
+//           }
+//         ],
+//         goodsList: [
+//           {
+//             img: 'static/img/goodsList/item-show-1.jpg',
+//             price: 36.60,
+//             intro: 'SKSK 苹果7/7plus手机壳 iPhone 7 Plus保护套全包硬壳男女磨砂防摔 火影红(苹',
+//             remarks: 6160,
+//             shopName: '元亨利配件专营店',
+//             sale: 9900
+//           },
+//           {
+//             img: 'static/img/goodsList/item-show-2.jpg',
+//             price: 28.00,
+//             intro: '蒙奇奇 苹果6s手机壳磨砂防摔保护套 适用于iphone6/6s/6sPlus/6plus 6/6s 4.7英',
+//             remarks: 3000,
+//             shopName: 'monqiqi旗舰店',
+//             sale: 9600
+//           },
+//           {
+//             img: 'static/img/goodsList/item-show-3.jpg',
+//             price: 15.00,
+//             intro: 'BIAZE 苹果6/6s手机壳 苹果iphone6s 4.7英寸透明手机套 清爽系列',
+//             remarks: 2800,
+//             shopName: 'BIAZE官方旗舰店',
+//             sale: 8900
+//           },
+//           {
+//             img: 'static/img/goodsList/item-show-4.jpg',
+//             price: 29.90,
+//             intro: '慕臣 苹果6s手机壳全包防摔磨砂软保护套男女 适用于iPhone6splus',
+//             remarks: 9000,
+//             shopName: '歌乐力手配专营店',
+//             sale: 8600
+//           },
+//           {
+//             img: 'static/img/goodsList/item-show-5.jpg',
+//             price: 15.00,
+//             intro: 'BIAZE 苹果6/6s手机壳 苹果iphone6s 4.7英寸透明手机套 清爽系列',
+//             remarks: 6160,
+//             shopName: 'BIAZE官方旗舰店',
+//             sale: 8560
+//           },
+//           {
+//             img: 'static/img/goodsList/item-show-6.jpg',
+//             price: 28.00,
+//             intro: '慕臣 苹果6s手机壳全包防摔磨砂软保护套男女 适用于iPhone6splus',
+//             remarks: 9006,
+//             shopName: '歌乐力手配专营店',
+//             sale: 8530
+//           },
+//           {
+//             img: 'static/img/goodsList/item-show-7.jpg',
+//             price: 15.00,
+//             intro: 'BIAZE 苹果6/6s手机壳 苹果iphone6s 4.7英寸透明手机套 清爽系列',
+//             remarks: 8666,
+//             shopName: 'BIAZE官方旗舰店',
+//             sale: 8360
+//           },
+//           {
+//             img: 'static/img/goodsList/item-show-8.jpg',
+//             price: 29.90,
+//             intro: '慕臣 苹果6s手机壳全包防摔磨砂软保护套男女 适用于iPhone6splus',
+//             remarks: 6080,
+//             shopName: '歌乐力手配专营店',
+//             sale: 7560
+//           },
+//           {
+//             img: 'static/img/goodsList/item-show-1.jpg',
+//             price: 36.60,
+//             intro: 'SKSK 苹果7/7plus手机壳 iPhone 7 Plus保护套全包硬壳男女磨砂防摔 火影红(苹',
+//             remarks: 6160,
+//             shopName: '元亨利配件专营店',
+//             sale: 7360
+//           },
+//           {
+//             img: 'static/img/goodsList/item-show-2.jpg',
+//             price: 28.00,
+//             intro: '蒙奇奇 苹果6s手机壳磨砂防摔保护套 适用于iphone6/6s/6sPlus/6plus 6/6s 4.7英',
+//             remarks: 3000,
+//             shopName: 'monqiqi旗舰店',
+//             sale: 6960
+//           },
+//           {
+//             img: 'static/img/goodsList/item-show-3.jpg',
+//             price: 15.00,
+//             intro: 'BIAZE 苹果6/6s手机壳 苹果iphone6s 4.7英寸透明手机套 清爽系列',
+//             remarks: 2800,
+//             shopName: 'BIAZE官方旗舰店',
+//             sale: 6560
+//           },
+//           {
+//             img: 'static/img/goodsList/item-show-4.jpg',
+//             price: 29.90,
+//             intro: '慕臣 苹果6s手机壳全包防摔磨砂软保护套男女 适用于iPhone6splus',
+//             remarks: 9000,
+//             shopName: '歌乐力手配专营店',
+//             sale: 6360
+//           },
+//           {
+//             img: 'static/img/goodsList/item-show-5.jpg',
+//             price: 15.00,
+//             intro: 'BIAZE 苹果6/6s手机壳 苹果iphone6s 4.7英寸透明手机套 清爽系列',
+//             remarks: 6160,
+//             shopName: 'BIAZE官方旗舰店',
+//             sale: 5530
+//           },
+//           {
+//             img: 'static/img/goodsList/item-show-6.jpg',
+//             price: 28.00,
+//             intro: '慕臣 苹果6s手机壳全包防摔磨砂软保护套男女 适用于iPhone6splus',
+//             remarks: 9006,
+//             shopName: '歌乐力手配专营店',
+//             sale: 5560
+//           },
+//           {
+//             img: 'static/img/goodsList/item-show-7.jpg',
+//             price: 15.00,
+//             intro: 'BIAZE 苹果6/6s手机壳 苹果iphone6s 4.7英寸透明手机套 清爽系列',
+//             remarks: 8666,
+//             shopName: 'BIAZE官方旗舰店',
+//             sale: 5260
+//           },
+//           {
+//             img: 'static/img/goodsList/item-show-8.jpg',
+//             price: 29.90,
+//             intro: '慕臣 苹果6s手机壳全包防摔磨砂软保护套男女 适用于iPhone6splus',
+//             remarks: 6080,
+//             shopName: '歌乐力手配专营店',
+//             sale: 3560
+//           }
+//         ]
+//       }
+//       commit('SET_GOODS_LIST', data)
+//       commit('SET_LOAD_STATUS', false)
+//     })
+//   })
+// }
 
 // 添加购物车
-export const addShoppingCart = ({ commit }, data) => {
-  return new Promise((resolve, reject) => {
-    commit('ADD_SHOPPING_CART', data)
-  })
-}
+// export const addShoppingCart = ({ commit }, data) => {
+//   return new Promise((resolve, reject) => {
+//     commit('ADD_SHOPPING_CART', data)
+//   })
+// }
 
 // 获取用户推荐
-export const loadRecommend = ({ commit }) => {
-  return new Promise((resolve, reject) => {
-    const data = [
-      [
-        {
-          img: 'static/img/otherBuy/1.jpg',
-          intro: 'iPhone7/6s/8钢化膜苹果7Plus全屏全覆盖3D抗蓝',
-          price: 29.00
-        },
-        {
-          img: 'static/img/otherBuy/2.jpg',
-          intro: '苹果数据线 苹果iPhoneX/6s/7plus/8充电线',
-          price: 36.00
-        },
-        {
-          img: 'static/img/otherBuy/3.jpg',
-          intro: '苹果8/7/6/6s钢化膜 iphone8/7/6s/6钢化玻璃',
-          price: 19.00
-        },
-        {
-          img: 'static/img/otherBuy/4.jpg',
-          intro: 'iPhone6s/7钢化膜苹果8 Plus手机膜抗蓝光非全屏',
-          price: 28.00
-        }
-      ],
-      [
-        {
-          img: 'static/img/otherBuy/5.jpg',
-          intro: '苹果6s手机壳iPhone6s Plus保护壳防摔全',
-          price: 28.00
-        },
-        {
-          img: 'static/img/otherBuy/6.jpg',
-          intro: 'iPhone7/8手机壳手机套防摔磨砂保护壳星空黑☆全包保护',
-          price: 30.00
-        },
-        {
-          img: 'static/img/otherBuy/7.jpg',
-          intro: '数据线 适用于苹果iPhone 6s/6plus/7plus/8/X',
-          price: 18.00
-        },
-        {
-          img: 'static/img/otherBuy/8.jpg',
-          intro: 'iPhone8/7/6S/6钢化膜 苹果8/7/6s/6玻璃膜 手机高',
-          price: 15.00
-        }
-      ]
-    ]
-    commit('SET_RECOMMEND_INFO', data)
-  })
-}
+// export const loadRecommend = ({ commit }) => {
+//   return new Promise((resolve, reject) => {
+//     const data = [
+//       [
+//         {
+//           img: 'static/img/otherBuy/1.jpg',
+//           intro: 'iPhone7/6s/8钢化膜苹果7Plus全屏全覆盖3D抗蓝',
+//           price: 29.00
+//         },
+//         {
+//           img: 'static/img/otherBuy/2.jpg',
+//           intro: '苹果数据线 苹果iPhoneX/6s/7plus/8充电线',
+//           price: 36.00
+//         },
+//         {
+//           img: 'static/img/otherBuy/3.jpg',
+//           intro: '苹果8/7/6/6s钢化膜 iphone8/7/6s/6钢化玻璃',
+//           price: 19.00
+//         },
+//         {
+//           img: 'static/img/otherBuy/4.jpg',
+//           intro: 'iPhone6s/7钢化膜苹果8 Plus手机膜抗蓝光非全屏',
+//           price: 28.00
+//         }
+//       ],
+//       [
+//         {
+//           img: 'static/img/otherBuy/5.jpg',
+//           intro: '苹果6s手机壳iPhone6s Plus保护壳防摔全',
+//           price: 28.00
+//         },
+//         {
+//           img: 'static/img/otherBuy/6.jpg',
+//           intro: 'iPhone7/8手机壳手机套防摔磨砂保护壳星空黑☆全包保护',
+//           price: 30.00
+//         },
+//         {
+//           img: 'static/img/otherBuy/7.jpg',
+//           intro: '数据线 适用于苹果iPhone 6s/6plus/7plus/8/X',
+//           price: 18.00
+//         },
+//         {
+//           img: 'static/img/otherBuy/8.jpg',
+//           intro: 'iPhone8/7/6S/6钢化膜 苹果8/7/6s/6玻璃膜 手机高',
+//           price: 15.00
+//         }
+//       ]
+//     ]
+//     commit('SET_RECOMMEND_INFO', data)
+//   })
+// }
 
 // export const loadAddress = ({ commit }) => {
 //   return new Promise((resolve, reject) => {
@@ -688,19 +657,19 @@ export const loadRecommend = ({ commit }) => {
 //   })
 // }
 
-export const loadShoppingCart = ({ commit }) => {
-  return new Promise((resolve, reject) => {
-    const data = [{
-      goods_id: 1529931938150,
-      count: 1,
-      img: 'static/img/goodsDetail/pack/1.jpg',
-      package: '4.7英寸-深邃蓝',
-      price: 28,
-      title: '苹果8/7手机壳iPhone7 Plus保护壳全包防摔磨砂硬外壳'
-    }]
-    commit('SET_SHOPPING_CART', data)
-  })
-}
+// export const loadShoppingCart = ({ commit }) => {
+//   return new Promise((resolve, reject) => {
+//     const data = [{
+//       goods_id: 1529931938150,
+//       count: 1,
+//       img: 'static/img/goodsDetail/pack/1.jpg',
+//       package: '4.7英寸-深邃蓝',
+//       price: 28,
+//       title: '苹果8/7手机壳iPhone7 Plus保护壳全包防摔磨砂硬外壳'
+//     }]
+//     commit('SET_SHOPPING_CART', data)
+//   })
+// }
 
 // 用户登录
 export const login = ({ commit }, loginForm) => {

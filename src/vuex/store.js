@@ -40,7 +40,7 @@ export default new Vuex.Store({
         minute: 0,
         seconds: 0
       },
-      goodsList: []
+      flashThemeList: []
     },
     computer: {}, // 电脑专栏
     eat: {}, // 爱吃专栏

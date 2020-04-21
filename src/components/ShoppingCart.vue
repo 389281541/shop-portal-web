@@ -37,7 +37,7 @@
       </table>
       <div class="cart_btn bc mt10">
         <router-link to="/goodsList" class="continue">继续购物</router-link>
-        <router-link to="/order" class="checkout">结 算</router-link>
+        <router-link :to="{path:'/order', query:{ flashFlag: '0'}}" class="checkout" v-show="cartList.length > 0">结 算</router-link>
       </div>
     </div>
   </div>
@@ -50,7 +50,8 @@ export default {
     return {
       cartList: [],
       totalAmount: null,
-      reduceAmount: null
+      reduceAmount: null,
+      showBalanceButton: null
     }
   },
   created () {

@@ -6,7 +6,7 @@ import router from './router'
 import iView from 'iview'
 import 'iview/dist/styles/iview.css'
 import { getToken } from '@/utils/auth'
-const blackList = ['/order', '/home/MyInfo', '/home/myAddress', '/home/addAddress', '/home/myOrder', '/home/myShoppingCart', '/home/myCoupon'] // 重定向黑名单
+const blackList = ['/', '/order', '/home/MyInfo', '/home/myAddress', '/home/addAddress', '/home/myOrder', '/home/myShoppingCart', '/home/myCoupon', '/shoppingCart'] // 重定向黑名单
 Vue.use(iView)
 Vue.config.productionTip = false
 

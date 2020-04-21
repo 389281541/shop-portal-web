@@ -9,13 +9,13 @@ export const SET_USER_LOGIN_INFO = (state, data) => {
 }
 
 // 设置加载状态
-export const SET_LOAD_STATUS = (state, status) => {
-  state.isLoading = status
-}
+// export const SET_LOAD_STATUS = (state, status) => {
+//   state.isLoading = status
+// }
 
 // 设置秒杀商品
 export const SET_SECKILLS_INFO = (state, seckills) => {
-  state.seckills.goodsList = seckills[0]
+  state.seckills.flashThemeList = seckills[0]
   state.seckills.deadline = seckills[1]
 }
 
@@ -36,17 +36,23 @@ export const SET_EAT_INFO = (state, eat) => {
 }
 
 // 减少秒杀时间
-// export const REDUCE_SECKILLS_TIME = state => {
-//   state.seckills.deadline.seconds--
-//   if (state.seckills.deadline.seconds === -1) {
-//     state.seckills.deadline.seconds = 59
-//     state.seckills.deadline.minute--
-//     if (state.seckills.deadline.minute === -1) {
-//       state.seckills.deadline.minute = 59
-//       state.seckills.deadline.hour--
-//     }
-//   }
-// }
+export const REDUCE_SECKILLS_TIME = state => {
+  if (state.seckills.flashThemeList.length === 0) {
+    return
+  }
+  if (state.seckills.deadline.seconds === 0 && state.seckills.deadline.minute === 0 && state.seckills.deadline.hour === 0) {
+    return
+  }
+  state.seckills.deadline.seconds--
+  if (state.seckills.deadline.seconds === -1) {
+    state.seckills.deadline.seconds = 59
+    state.seckills.deadline.minute--
+    if (state.seckills.deadline.minute === -1) {
+      state.seckills.deadline.minute = 59
+      state.seckills.deadline.hour--
+    }
+  }
+}
 
 // 设置商品列表(搜索)
 // export const SET_GOODS_LIST = (state, data) => {

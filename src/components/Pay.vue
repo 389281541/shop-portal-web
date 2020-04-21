@@ -4,17 +4,14 @@
       <Alert show-icon>
         扫码支付
         <Icon type="qr-scanner" slot="icon"></Icon>
-        <template slot="desc">请扫描右边二维码进行支付</template>
+        <template slot="desc">请用沙箱版支付宝扫描右边二维码进行支付</template>
       </Alert>
       <div class="pay-box">
         <div class="pay-demo">
           <img src="static/img/pay/pay-demo.png">
         </div>
         <div class="pay-qr-scan">
-          <img src="static/img/pay/pay-qrscan.png">
-          <div class="pay-tips">
-            <router-link to="/payDone"><p>点击我, 完成支付</p></router-link>
-          </div>
+          <img :src="qrCodeImgUrl">
         </div>
       </div>
     </div>
@@ -22,8 +19,45 @@
 </template>
 
 <script>
+import {createQrCodeImage} from '@/api/pay'
+import {getOrderStatus} from '@/api/order'
 export default {
-  name: 'Pay'
+  name: 'Pay',
+  created () {
+    this.parentOrderNo = this.$route.query.parentOrderNo
+    this.listenOrderStatus()
+    this.generateImg()
+  },
+  activated () {
+
+  },
+  destroyed () {
+    clearInterval(this.paymentTimer)
+  },
+  data () {
+    return {
+      parentOrderNo: null,
+      qrCodeImgUrl: null,
+      paymentTimer: null
+    }
+  },
+  methods: {
+    generateImg () {
+      createQrCodeImage({parentOrderNo: this.parentOrderNo}).then(response => {
+        this.qrCodeImgUrl = response.data.path
+      })
+    },
+    listenOrderStatus () {
+      let paymentTimer = setInterval(() => {
+        getOrderStatus({parentOrderNo: this.parentOrderNo}).then(response => {
+          if (response.data) {
+            this.$router.push('/payDone')
+          }
+        })
+      }, 5e3)
+      this.paymentTimer = paymentTimer
+    }
+  }
 }
 </script>
 

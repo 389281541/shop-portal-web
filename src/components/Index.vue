@@ -5,17 +5,17 @@
     <!-- 商品显示区域 -->
     <div class="content">
       <!-- 秒杀 -->
-      <div class="seckill">
+      <div class="seckill" v-for="(item, index) in seckills.flashThemeList" :key="index">
         <!-- 头部 -->
         <div class="seckill-head">
           <div class="seckill-icon">
             <img src="static/img/index/clock.png">
           </div>
           <div class="seckill-text">
-            <span class="seckill-title">限时秒杀</span>
+            <span class="seckill-title">{{item.theme}}</span>
             <span class="seckill-remarks">总有你想不到的低价</span>
           </div>
-          <div class="count-down">
+          <div class="count-down" v-show="item.flashStatus === 1">
             <span class="count-down-text">当前场次</span>
             <span class="count-down-num count-down-hour">{{ seckillsHours }}</span>
             <span class="count-down-point">:</span>
@@ -24,18 +24,27 @@
             <span class="count-down-num count-down-seconds">{{ seckillsSeconds }}</span>
             <span class="count-down-text">后结束抢购</span>
           </div>
+          <div class="count-down" v-show="item.flashStatus === 0">
+            <span class="count-down-text">当前场次</span>
+            <span class="count-down-num count-down-hour">{{ seckillsHours }}</span>
+            <span class="count-down-point">:</span>
+            <span class="count-down-num count-down-minute">{{ seckillsMinutes }}</span>
+            <span class="count-down-point">:</span>
+            <span class="count-down-num count-down-seconds">{{ seckillsSeconds }}</span>
+            <span class="count-down-text">后开始抢购</span>
+          </div>
         </div>
         <!-- 内容 -->
         <div class="seckill-content">
-          <div class="seckill-item" v-for="(item, index) in seckills.goodsList" :key="index">
+          <div class="seckill-item" v-for="(subItem, index) in item.flashGoodsList" :key="index">
             <div class="seckill-item-img">
-              <router-link to="/goodsList"><img :src="item.img"></router-link>
+              <router-link :to="{path:'/goodsDetail', query:{ id: subItem.id}}"><img :src="subItem.coverImg"></router-link>
             </div>
             <div class="seckill-item-info">
-              <p>{{item.intro}}</p>
-              <p>
-                <span class="seckill-price text-danger"><Icon type="social-yen"></Icon>{{item.price}}</span>
-                <span class="seckill-old-price"><s>{{item.realPrice}}</s></span>
+              <p><router-link class="seckill-spu-name-color" :to="{path:'/goodsDetail', query:{ id: subItem.id}}">{{subItem.name}}</router-link></p>
+              <p class="price">
+                <span class="seckill-price text-danger"><Icon type="social-yen"></Icon>¥{{subItem.flashPrice.toFixed(2)}}</span>
+                <span class="seckill-old-price"><s>¥{{subItem.originalPrice.toFixed(2)}}</s></span>
               </p>
             </div>
           </div>
@@ -131,11 +140,10 @@ import { mapState, mapActions, mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'Index',
   created () {
-    this.loadSeckillsInfo()
+    this.fetchFlashGoodsList()
     this.loadCarouselItems()
     this.loadComputer()
     this.loadEat()
-    this.loadShoppingCart()
   },
   mounted () {
     const father = this
@@ -149,7 +157,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['loadSeckillsInfo', 'loadCarouselItems', 'loadComputer', 'loadEat', 'loadShoppingCart']),
+    ...mapActions(['fetchFlashGoodsList', 'loadCarouselItems', 'loadComputer', 'loadEat']),
     ...mapMutations(['REDUCE_SECKILLS_TIME'])
   },
   computed: {
@@ -292,12 +300,18 @@ export default {
   font-size: 12px;
   color: #009688
 }
+.seckill-item-info .price {
+  margin-bottom: 36px;
+}
+.seckill-spu-name-color {
+  color: #009688;
+}
 .seckill-item-info i:first-child {
   font-size: 14px
 }
 .seckill-price {
   margin-right: 5px;
-  font-size: 25px;
+  font-size: 22px;
   font-weight: bold
 }
 /*****************************秒杀专栏结束*****************************/

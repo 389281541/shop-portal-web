@@ -24,7 +24,7 @@
           </div>
           <div class="item-as" v-for="(item,index) in recommendGoodsList" :key="index">
             <div class="item-as-img">
-              <router-link :to="{path:'/goodsDetail', query:{ id: item.id}}"><img :src="item.coverImg" alt=""></router-link>
+              <router-link :to="{path:'/goodsDetail', query:{ id: item.id }}"><img :src="item.coverImg" alt=""></router-link>
             </div>
             <div class="item-as-price">
               <span>
@@ -32,7 +32,7 @@
               </span>
             </div>
             <div class="item-as-intro font-color">
-              <router-link :to="{path:'/goodsDetail', query:{ id: item.id}}"><span  class="font-color">{{item.name}}</span></router-link>
+              <router-link :to="{path:'/goodsDetail', query:{ id: item.id }}"><span  class="font-color">{{item.name}}</span></router-link>
             </div>
             <div class="item-as-selled">
               已有<span>{{item.sale}}</span>人购买
@@ -48,7 +48,7 @@
           <div class="goods-list">
             <div class="goods-show-info" v-for="(item, index) in goodsList" :key="index">
               <div class="goods-show-img">
-                <router-link :to="{path:'/goodsDetail', query:{ id: item.id}}"><img :src="item.coverImg"/></router-link>
+                <router-link :to="{path:'/goodsDetail', query:{ id: item.id }}"><img :src="item.coverImg"/></router-link>
               </div>
               <div class="goods-show-price">
                 <span>
@@ -56,7 +56,7 @@
                 </span>
               </div>
               <div class="goods-show-detail" >
-                <router-link :to="{path:'/goodsDetail', query:{ id: item.id}}"><span class="font-color">{{item.name}}</span></router-link>
+                <router-link :to="{path:'/goodsDetail', query:{ id: item.id }}"><span class="font-color">{{item.name}}</span></router-link>
               </div>
               <div class="goods-show-num">
                 已有<span>{{item.sale}}</span>人购买

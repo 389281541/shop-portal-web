@@ -32,7 +32,10 @@ service.interceptors.response.use(
     const res = response.data
     console.log('res=' + res.code)
     if (res.code !== 0) {
-      alert(res.message)
+      if (res.code === 10000003 || res.code === 10203003) {
+        alert(res.message)
+      }
+
       // 401:未登录
       if (res.code === 401 || res.code === 403) {
         MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {

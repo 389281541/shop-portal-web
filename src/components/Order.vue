@@ -73,6 +73,7 @@
           <table>
             <thead>
             <tr>
+              <th class='col0'>店铺</th>
               <th class='col1'>商品</th>
               <th class='col2'>规格</th>
               <th class='col3'>价格</th>
@@ -82,7 +83,8 @@
             </thead>
             <tbody>
             <tr v-for="(item, index) in confirmOrder.cartPromotionList" :key="index">
-              <td class='col1'><a href="javascript:void(0);"><img :src="item.coverImg" alt=''/></a> <strong><router-link :to="{path:'/goodsDetail', query:{ id: item.spuId}}">{{item.spuName}}</router-link></strong>
+              <td class='col0'>{{item.shopName}}</td>
+              <td class='col1'><a href="javascript:void(0);"><img :src="item.coverImg" alt=''/></a> <router-link :to="{path:'/goodsDetail', query:{ id: item.spuId}}" style="color: #666666">{{item.spuName}}</router-link>
               </td>
               <td class='col2'><p v-for="(spec,index) in handleSpec(item.skuSpec)" :key="index">{{spec}}</p></td>
               <td class='col3'>￥{{item.price.toFixed(2)}}</td>
@@ -92,7 +94,7 @@
             </tbody>
             <tfoot>
             <tr>
-              <td colspan='5'>
+              <td colspan='6'>
                 <ul>
                   <li>
                     <span>{{totalQuantity}}件商品，总商品金额：</span>
@@ -101,28 +103,24 @@
                   <br/>
                   <li>
                     <span>促销优惠：</span>
-                    <em>-￥{{totalPromotionAmount.toFixed(2)}}</em>
+                    <em>￥{{totalPromotionAmount.toFixed(2)}}</em>
                   </li>
-                  <li>
+                  <li v-if="confirmOrder.couponList.size > 0">
                     <span>
-                      <select style="font-size:12px; color:#666666">
-                        <option value="0">不使用优惠券</option>
-                      <option :value ="item.amount" v-for="(item, index) in confirmOrder.couponList" :key="index">{{item.name}}</option>
+                      <select style="font-size:12px; color:#666666; height: 20px">
+                        <option value="0" @click="handleCouponChange(0, null)">不使用优惠券</option>
+                        <option :value ="item.amount" @click="handleCouponChange(item.amount, item.id)" v-for="(item, index) in confirmOrder.couponList" :key="index">{{item.name}}</option>
                       </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;优惠券：</span>
-                    <em>-￥{{couponAmount.toFixed(2)}}</em>
+                    <em>￥{{couponAmount.toFixed(2)}}</em>
                   </li>
                   <br/>
-                  <li>
+                  <li v-if="confirmOrder.recommendIntegration > 0">
                     <input type="checkbox" class="integration" :value="useIntegration" @change="handleIntegration"/><span style="font-size:12px; color:#666666; margin-bottom: 5px">使用{{confirmOrder.recommendIntegration}}积分</span>&nbsp;&nbsp;&nbsp;&nbsp;积分抵扣：
-                    <em>-￥{{totalIntegrationAmount.toFixed(2)}}</em>
+                    <em>￥{{totalIntegrationAmount.toFixed(2)}}</em>
                   </li>
                   <li>
                     <span>运费：</span>
-                    <em>￥{{deliverAmount.toFixed(2)}}</em>
-                  </li>
-                  <li>
-                    <span>应付总额：</span>
-                    <em>￥5076.00</em>
+                    <em>￥{{(confirmOrder.orderNum * deliverAmount).toFixed(2)}}</em>
                   </li>
                 </ul>
               </td>
@@ -133,8 +131,8 @@
         <!-- 商品清单 end -->
       </div>
       <div class='fillin_ft'>
-        <a href=''><span @click="submit">提交订单</span></a>
-        <p>应付总额：<strong>￥5076.00元</strong></p>
+        <a @click="submit"><span>订单</span></a>
+        <p>应付总额：<strong>￥{{(totalAmount-totalPromotionAmount-couponAmount-totalIntegrationAmount+deliverAmount).toFixed(2)}}元</strong></p>
       </div>
     </div>
     <!-- 主体部分 end -->
@@ -145,12 +143,13 @@
 import Search from '@/components/Search'
 import GoodsListNav from '@/components/nav/GoodsListNav'
 import {generateConfirmOrder, generateOrder} from '@/api/order'
+import {generateFlashConfirmOrder} from '@/api/flash'
 const defaultConfirmOrder = {
-  totalAmount: null,
-  deliverAmount: null,
-  promotionAmount: null,
-  payAmount: null,
-  integrationRuleSetting: null,
+  totalAmount: 0,
+  deliverAmount: 0,
+  promotionAmount: 0,
+  payAmount: 0,
+  integrationRuleSetting: 0,
   cartPromotionList: [],
   customerAddressList: [],
   couponList: []
@@ -158,13 +157,15 @@ const defaultConfirmOrder = {
 const defaultGenrateOrderParam = {
   couponId: null,
   addressId: null,
-  payType: null,
-  deliverMode: null,
-  useIntegration: null
+  payType: 0,
+  deliverMode: 0,
+  deliverFee: 0,
+  useIntegration: 0
 }
 export default {
   name: 'Order',
   created () {
+    this.flashFlag = this.$route.query.flashFlag
     this.generateConfirmOrder()
     this.selectDeliverMode = this.deliverModeList[0]
     this.selelctPayMode = this.payModeList[0]
@@ -175,7 +176,7 @@ export default {
       isDeliveryModify: true,
       isPayModify: true,
       selectedAddressIndex: null,
-      selectAddress: null,
+      selectAddress: {receiverName: ''},
       selectDeliverMode: null,
       selelctPayMode: null,
       confirmOrder: Object.assign({}, defaultConfirmOrder),
@@ -187,6 +188,7 @@ export default {
       useIntegration: false,
       deliverAmount: null,
       couponAmount: 0,
+      flashFlag: 0,
       deliverModeList: [
         {
           value: 0,
@@ -221,14 +223,31 @@ export default {
   },
   methods: {
     generateConfirmOrder () {
-      generateConfirmOrder().then(response => {
-        this.confirmOrder = response.data
-        this.getDefaultAddress()
-        this.calculteTotalAmount()
-        this.totalIntegrationAmount = this.confirmOrder.recommendIntegration / 100.0
-        this.deliverAmount = 0
-        this.couponAmount = 0
-      })
+      if (this.flashFlag === '0') {
+        generateConfirmOrder().then(response => {
+          this.confirmOrder = response.data
+          this.getDefaultAddress()
+          this.calculteTotalAmount()
+          this.totalIntegrationAmount = 0
+          this.deliverAmount = 0
+          this.couponAmount = 0
+          this.selelctPayMode = this.payModeList[0]
+        }).catch(() => {
+          this.$router.push({path: '/'})
+        })
+      } else {
+        generateFlashConfirmOrder().then(response => {
+          this.confirmOrder = response.data
+          this.getDefaultAddress()
+          this.calculteTotalAmount()
+          this.totalIntegrationAmount = 0
+          this.deliverAmount = 0
+          this.couponAmount = 0
+          this.selelctPayMode = this.payModeList[0]
+        }).catch(() => {
+          this.$router.push({path: '/'})
+        })
+      }
     },
     modifyAddress () {
       this.isAddressModify = false
@@ -260,9 +279,11 @@ export default {
     handleChangeAddress (index) {
       this.selectedAddressIndex = index
       this.selectAddress = this.confirmOrder.customerAddressList[index]
+      this.genrateOrderParam.addressId = this.selectAddress.id
     },
     handleDeliverMode (index) {
       this.selectDeliverMode = this.deliverModeList[index]
+      this.genrateOrderParam.deliverMode = this.selectDeliverMode.value
       if (index === 0) {
         this.deliverAmount = 0
       } else {
@@ -271,6 +292,7 @@ export default {
     },
     handelPayMode (index) {
       this.selelctPayMode = this.payModeList[index]
+      this.genrateOrderParam.payType = this.selelctPayMode.value
     },
     handleSpec (value) {
       if (value === null) {
@@ -290,7 +312,19 @@ export default {
       }
     },
     submit () {
-      generateOrder(this.genrateOrderParam)
+      this.genrateOrderParam.addressId = this.selectAddress.id
+      this.genrateOrderParam.deliverMode = this.selectDeliverMode.value
+      this.genrateOrderParam.payType = this.selelctPayMode.value
+      this.genrateOrderParam.deliverFee = this.deliverAmount
+      if (this.useIntegration) {
+        this.genrateOrderParam.useIntegration = this.confirmOrder.recommendIntegration
+      } else {
+        this.genrateOrderParam.useIntegration = 0
+      }
+      generateOrder(this.genrateOrderParam).then(response => {
+        let parentOrderNo = response.data
+        this.$router.push({path: '/pay', query: {parentOrderNo: parentOrderNo}})
+      })
     },
     calculteTotalAmount () {
       let quantity = 0
@@ -309,9 +343,15 @@ export default {
       this.useIntegration = !this.useIntegration
       if (this.useIntegration) {
         this.totalIntegrationAmount = this.confirmOrder.recommendIntegration / 100.0
+        this.genrateOrderParam.useIntegration = this.confirmOrder.recommendIntegration
       } else {
         this.totalIntegrationAmount = 0
+        this.genrateOrderParam.useIntegration = 0
       }
+    },
+    handleCouponChange (value, id) {
+      this.couponAmount = value
+      this.genrateOrderParam.couponId = id
     }
   },
   components: {
@@ -497,8 +537,11 @@ input[type='radio'] {
 .goods .last td {
   border-bottom: 0;
 }
+.goods .col0 {
+  width: 20%;
+}
 .goods .col1 {
-  width: 50%;
+  width: 30%;
 }
 .goods .col2 {
   width: 20%;
