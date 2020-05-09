@@ -17,7 +17,7 @@
         <li v-show="!!userInfo.name">
           <Dropdown>
             <p class="username-p">
-              <Avatar class="person-icon" :src="avatar" size="small" /><span class="username">{{userInfo.name}} </span>
+              <Avatar class="person-icon" :src="customerInfo.avatar" size="small" /><span class="username">{{userInfo.name}} </span>
             </p>
             <DropdownMenu slot="list">
                 <div class="my-page">
@@ -74,7 +74,7 @@
             </DropdownMenu>
           </Dropdown>
         </li>
-        <li><router-link to="/freeback">我的订单</router-link></li>
+        <li><router-link to="/home/myOrder">我的订单</router-link></li>
         <li><router-link to="/">网站导航</router-link></li>
         <li><router-link to="/">商城首页</router-link></li>
       </ul>
@@ -86,18 +86,18 @@
 import store from '@/vuex/store'
 import { mapState, mapActions } from 'vuex'
 import {fetchCartList} from '@/api/cart'
-
+import { getCustomerInfo } from '@/api/customer'
 export default {
   name: 'M-Header',
   created () {
-    this.avatar = 'https://image.songshupinpin.com/16075df01ef640a6b0755ab8d90d316f'
     this.isLogin()
     this.getCartList()
+    this.getUserInfo()
   },
   data () {
     return {
-      avatar: null,
-      cartList: []
+      cartList: [],
+      customerInfo: {}
     }
   },
   computed: {
@@ -123,6 +123,11 @@ export default {
     },
     freshCartList () {
       this.getCartList()
+    },
+    getUserInfo () {
+      getCustomerInfo().then(response => {
+        this.customerInfo = response.data
+      })
     }
   },
   store

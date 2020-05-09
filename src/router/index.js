@@ -18,6 +18,7 @@ const MyInfo = resolve => require(['@/components/home/MyInfo'], resolve)
 const MyAddress = resolve => require(['@/components/home/MyAddress'], resolve)
 const AddAddress = resolve => require(['@/components/home/AddAddress'], resolve)
 const MyOrder = resolve => require(['@/components/home/MyOrder'], resolve)
+const OrderDetail = resolve => require(['@/components/home/OrderDetail'], resolve)
 const MyShoppingCart = resolve => require(['@/components/home/MyShoppingCart'], resolve)
 const MyCoupon = resolve => require(['@/components/home/MyCoupon'], resolve)
 const Merchant = resolve => require(['@/components/Merchant'], resolve)
@@ -126,6 +127,11 @@ export const constantRouterMap = [
         path: 'myOrder',
         name: 'MyOrder',
         component: MyOrder
+      },
+      {
+        path: '/orderDetail', // 订单详情页面
+        name: 'OrderDetail',
+        component: OrderDetail
       },
       {
         path: 'myShoppingCart',

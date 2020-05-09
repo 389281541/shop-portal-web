@@ -6,8 +6,12 @@ import router from './router'
 import iView from 'iview'
 import 'iview/dist/styles/iview.css'
 import { getToken } from '@/utils/auth'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+import locale from 'element-ui/lib/locale/lang/zh-CN'
 const blackList = ['/', '/order', '/home/MyInfo', '/home/myAddress', '/home/addAddress', '/home/myOrder', '/home/myShoppingCart', '/home/myCoupon', '/shoppingCart'] // 重定向黑名单
 Vue.use(iView)
+Vue.use(ElementUI, { locale })
 Vue.config.productionTip = false
 
 router.beforeEach((to, from, next) => {

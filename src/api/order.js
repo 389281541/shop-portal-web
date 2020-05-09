@@ -24,6 +24,14 @@ export function fetchOrderList (data) {
   })
 }
 
+export function removeOrder (data) {
+  return request({
+    url: '/order/remove',
+    method: 'post',
+    data: data
+  })
+}
+
 export function getOrderDetail (data) {
   return request({
     url: '/order/get',

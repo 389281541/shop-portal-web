@@ -26,7 +26,7 @@ export default new Vuex.Store({
     userInfo: { // 用户信息
       id: '',
       name: '',
-      avartar: '',
+      avatar: '',
       token: ''
     },
     signUpStep: 0, // 登陆步骤

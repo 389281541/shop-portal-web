@@ -5,7 +5,7 @@
         <Menu active-name="1-2" theme="light" width="auto" @on-select="onSelect">
           <div class="user-icon">
             <div class="user-img">
-              <img :src="avatar">
+              <img :src="userInfo.avatar">
             </div>
             <p>{{userInfo.name}}</p>
           </div>
@@ -25,13 +25,13 @@
             </template>
             <menu-item name="myOrder">我的订单</menu-item>
           </Submenu>
-          <Submenu name="3">
-            <template slot="title">
-                <Icon type="ios-cart" size="24"></Icon>
-                <span>购物车</span>
-            </template>
-            <menu-item name="myShoppingCart">我的购物车</menu-item>
-          </Submenu>
+<!--          <Submenu name="3">-->
+<!--            <template slot="title">-->
+<!--                <Icon type="ios-cart" size="24"></Icon>-->
+<!--                <span>购物车</span>-->
+<!--            </template>-->
+<!--            <menu-item name="myShoppingCart">我的购物车</menu-item>-->
+<!--          </Submenu>-->
           <Submenu name="4">
             <template slot="title">
               <Icon type="ios-pricetag" size="24"></Icon>
@@ -58,7 +58,7 @@
 
 <script>
 import store from '@/vuex/store'
-import { mapState } from 'vuex'
+import { getCustomerInfo } from '@/api/customer'
 export default {
   name: 'Home',
   data () {
@@ -70,19 +70,22 @@ export default {
         'addAddress': '添加收货地址',
         'myOrder': '我的订单',
         'myShoppingCart': '我的购物车'
-      }
+      },
+      userInfo: {}
     }
   },
-  computed: {
-    ...mapState(['userInfo'])
-  },
   created () {
-    this.avatar = 'https://image.songshupinpin.com/16075df01ef640a6b0755ab8d90d316f'
+    this.getUserInfo()
   },
   methods: {
     onSelect (name) {
       this.activeTitle = this.bar[name]
       this.$router.push(`/home/${name}`)
+    },
+    getUserInfo () {
+      getCustomerInfo().then(response => {
+        this.userInfo = response.data
+      })
     }
   },
   store

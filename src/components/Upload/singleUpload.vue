@@ -4,8 +4,9 @@
       action="http://up-z1.qiniup.com"
       :data="dataObj"
       list-type="picture"
-      :multiple="false" :show-file-list="showFileList"
-      :file-list="fileList"
+      :multiple="false"
+      :show-upload-list="showFileList"
+      :default-file-list="fileList"
       :before-upload="beforeUpload"
       :on-remove="handleRemove"
       :on-success="handleUploadSuccess"
@@ -13,9 +14,9 @@
       <Button size="small" type="primary">点击上传</Button>
       <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过10MB</div>
     </Upload>
-    <Dialog :visible.sync="dialogVisible">
-      <img width="100%" :src="fileList[0].url" alt="">
-    </Dialog>
+    <Modal title="查看图片" v-model="dialogVisible">
+      <img width="100%" v-if="dialogVisible" :src="fileList[0].url" alt="">
+    </Modal>
   </div>
 </template>
 <script>

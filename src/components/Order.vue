@@ -143,7 +143,7 @@
 import Search from '@/components/Search'
 import GoodsListNav from '@/components/nav/GoodsListNav'
 import {generateConfirmOrder, generateOrder} from '@/api/order'
-import {generateFlashConfirmOrder} from '@/api/flash'
+import {generateFlashConfirmOrder, generateFlashOrder} from '@/api/flash'
 const defaultConfirmOrder = {
   totalAmount: 0,
   deliverAmount: 0,
@@ -321,10 +321,17 @@ export default {
       } else {
         this.genrateOrderParam.useIntegration = 0
       }
-      generateOrder(this.genrateOrderParam).then(response => {
-        let parentOrderNo = response.data
-        this.$router.push({path: '/pay', query: {parentOrderNo: parentOrderNo}})
-      })
+      if (this.flashFlag === '0') {
+        generateOrder(this.genrateOrderParam).then(response => {
+          let parentOrderNo = response.data
+          this.$router.push({path: '/pay', query: {parentOrderNo: parentOrderNo}})
+        })
+      } else {
+        generateFlashOrder(this.genrateOrderParam).then(response => {
+          let parentOrderNo = response.data
+          this.$router.push({path: '/pay', query: {parentOrderNo: parentOrderNo}})
+        })
+      }
     },
     calculteTotalAmount () {
       let quantity = 0

@@ -69,7 +69,7 @@
         </div>
       </div>
       <div class="goods-page">
-        <Page :total="total" :current="listQuery.pageNum" :page-size="listQuery.pageSize" @change="handlePageChange()"></Page>
+        <Page :total="total" :current="listQuery.pageNum" :page-size="listQuery.pageSize" @on-change="handlePageChange"></Page>
       </div>
     </div>
     <Spin size="large" fix v-if="listLoading"></Spin>
@@ -129,12 +129,12 @@ export default {
       fetchRecommendGoodsList({itemId: this.searchItem}).then(response => {
         this.listLoading = false
         this.recommendGoodsList = response.data
-        this.total = response.data.total
       })
     },
     getGoodsList () {
       fetchGoodsList(this.listQuery).then(response => {
         this.goodsList = response.data.records
+        this.total = response.data.total
       })
     },
     handlePageChange (i) {

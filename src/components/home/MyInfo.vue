@@ -60,7 +60,7 @@ const defaultCustomerInfo = {
   email: ''
 }
 export default {
-  name: 'InputInfo',
+  name: 'MyInfo',
   components: { SingleUpload },
   data () {
     return {
@@ -106,9 +106,9 @@ export default {
           updateCustomer(this.customerInfo).then(response => {
             let res = response.data
             if (res) {
-              this.$Message.success('修改成功')
+              return true
             } else {
-              this.$Message.error('修改失败')
+              return false
             }
           })
         }

@@ -23,3 +23,11 @@ export function goConfirmOrder (data) {
     data: data
   })
 }
+
+export function generateFlashOrder (data) {
+  return request({
+    url: '/flash/generateOrder',
+    method: 'post',
+    data: data
+  })
+}
