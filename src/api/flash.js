@@ -24,10 +24,17 @@ export function goConfirmOrder (data) {
   })
 }
 
-export function generateFlashOrder (data) {
+export function generateFlashOrder (path, data) {
   return request({
-    url: '/flash/generateOrder',
+    url: '/flash/' + path + '/generateOrder',
     method: 'post',
     data: data
+  })
+}
+
+export function fetchPath () {
+  return request({
+    url: '/flash/path/get',
+    method: 'post'
   })
 }
