@@ -1,8 +1,16 @@
 import request from '@/utils/request'
 
-export function createQrCodeImage (data) {
+export function goPay (data) {
   return request({
-    url: '/payment/createQrCodeImage',
+    url: '/aliPay/goPay',
+    method: 'post',
+    data: data
+  })
+}
+
+export function alipayCallback (data) {
+  return request({
+    url: '/aliPay/callback',
     method: 'post',
     data: data
   })
