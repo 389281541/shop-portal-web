@@ -54,7 +54,7 @@
                 <span class="item-promotion-price" v-if="this.selectedSku !== null">￥{{(this.selectedSku.originalPrice - value.flashSpuInfo.flashDiscountPrice).toFixed(2)}}</span>
               </p>
             </div>
-            <div class="item-price-row" v-show="value.promotionType===2">
+            <div class="item-price-row" v-show="value.flashSpuInfo.flashFlag===0 && value.promotionType===2">
               <p>
                 <span class="item-price-title">满&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;减</span>
                 <span class="item-price-full-cut" v-for="(item,index) in value.fullReductionList" :key="index">满{{item.fullPrice}}减{{item.reducePrice}}</span>
@@ -65,7 +65,8 @@
             <div class="item-remarks-sum">
               <p>限购</p>
               <p  v-show="value.flashSpuInfo.flashFlag===0">
-                <span class="item-remarks-num">{{value.promotionPerLimit}}件</span>
+                <span class="item-remarks-num" v-if="value.promotionType === 0">无</span>
+                <span class="item-remarks-num" v-else>{{value.promotionPerLimit}}件</span>
               </p>
               <p  v-show="value.flashSpuInfo.flashFlag===1">
                 <span class="item-remarks-num">{{value.flashSpuInfo.flashPromotionLimit}}</span>
@@ -102,7 +103,7 @@
           <div class="add-buy-car"  v-show="value.flashSpuInfo.flashFlag===1">
             <InputNumber :min="1" v-model="count" size="large"></InputNumber>
             <Button type="error" size="large" @click="doFlash()" :disabled="value.flashSpuInfo.flashStatus===0">立即秒杀</Button>
-            <span class="item-price-title" v-if="this.selectedSku !== null">&nbsp;&nbsp;&nbsp;&nbsp;库存{{value.flashSpuInfo.flashPromotionNum - this.selectedSku.lockStock}}件</span>
+            <span class="item-price-title" v-if="this.selectedSku !== null">&nbsp;&nbsp;&nbsp;&nbsp;库存{{value.flashSpuInfo.flashPromotionNum}}件</span>
           </div>
         </div>
       </div>
@@ -183,12 +184,16 @@ export default {
       })
     },
     doFlash () {
-      goConfirmOrder({skuId: this.selectedSku.id, quantity: this.count, flashPrice: this.selectedSku.originalPrice - this.value.flashSpuInfo.flashDiscountPrice}).then(response => {
+      goConfirmOrder({skuId: this.selectedSku.id, quantity: this.count, flashPrice: this.selectedSku.originalPrice - this.value.flashSpuInfo.flashDiscountPrice, flashPromotionId: this.value.flashSpuInfo.flashPromotionId, flashPromotionSessionId: this.value.flashSpuInfo.flashPromotionSessionId, flashPromotionNum: this.value.flashSpuInfo.flashPromotionNum}).then(response => {
         let res = response.data
-        if (!res) {
-          this.$Message.error('秒杀失败！')
+        if (this.count > this.value.flashSpuInfo.flashPromotionLimit) {
+          alert('超出限购了！')
+        } else {
+          if (!res) {
+            this.$Message.error('秒杀失败！')
+          }
+          this.$router.push({path: '/order', query: {flashFlag: '1'}})
         }
-        this.$router.push({path: '/order', query: {flashFlag: '1'}})
       })
     },
     flashTimeUpdate () {
