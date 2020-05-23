@@ -65,6 +65,7 @@ export default {
     return {
       activeTitle: '我的订单',
       avatar: null,
+      array: [],
       bar: {
         'myAddress': '我的收货地址',
         'addAddress': '添加收货地址',
@@ -75,6 +76,10 @@ export default {
     }
   },
   created () {
+    let path = this.$route.path
+    this.array = path.split('/')
+    let length = this.array.length
+    this.activeTitle = this.bar[this.array[length - 1]]
     this.getUserInfo()
   },
   methods: {

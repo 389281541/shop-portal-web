@@ -11,6 +11,7 @@
       </div>
       <div class="address-content">
         <p><span class="address-content-title"> 收 货 人 :</span> {{item.receiverName}}</p>
+        <p><span class="address-content-title"> 手 机 号 :</span> {{item.phone}}</p>
         <p><span class="address-content-title">收货地区:</span> {{item.province}} {{item.city}} {{item.district}}</p>
         <p><span class="address-content-title">收货地址:</span> {{item.address}}</p>
         <p><span class="address-content-title">邮政编码:</span> {{item.zip}}</p>
@@ -25,6 +26,9 @@
             <Form :model="formData" label-position="left" :label-width="100" :rules="ruleInline">
               <FormItem label="收件人" prop="name">
                 <i-input v-model="formData.receiverName" size="large"></i-input>
+              </FormItem>
+              <FormItem label="手机号" prop="phone">
+                <i-input v-model="formData.phone" size="large"></i-input>
               </FormItem>
               <FormItem label="收件地区" prop="address">
                 <Distpicker :province="formData.province" :city="formData.city" :area="formData.district" @province="getProvince" @city="getCity" @area="getArea"></Distpicker>
@@ -103,6 +107,7 @@ export default {
         } else {
           this.$Message.error('修改失败')
         }
+        this.getAddressList()
       })
     },
     del (index) {
@@ -117,6 +122,7 @@ export default {
             } else {
               this.$Message.error('删除失败')
             }
+            this.getAddressList()
           })
         },
         onCancel: () => {
@@ -132,7 +138,7 @@ export default {
         } else {
           this.$Message.error('设置失败')
         }
-        window.location.reload()
+        this.getAddressList()
       })
     },
     getProvince (data) {

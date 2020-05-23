@@ -9,6 +9,9 @@
           <FormItem label="收件人" prop="receiverName">
             <i-input v-model="formData.receiverName" size="large"></i-input>
           </FormItem>
+          <FormItem label="收件人电话" prop="phone">
+            <i-input v-model="formData.phone" size="large"></i-input>
+          </FormItem>
           <FormItem label="收件地区" prop="address">
             <Distpicker :province="formData.province" :city="formData.city" :area="formData.district" @province="getProvince" @city="getCity" @area="getArea"></Distpicker>
           </FormItem>
@@ -32,6 +35,7 @@ import Distpicker from 'v-distpicker'
 import {addAddress} from '@/api/address'
 const defaultFormData = {
   receiverName: '',
+  phone: '',
   province: '',
   city: '',
   district: null,
@@ -46,6 +50,9 @@ export default {
       ruleInline: {
         receiverName: [
           { required: true, message: '请输入姓名', trigger: 'blur' }
+        ],
+        phone: [
+          { required: true, message: '请输入手机号', trigger: 'blur' }
         ],
         address: [
           { required: true, message: '请输入地址', trigger: 'blur' }
@@ -74,6 +81,7 @@ export default {
         } else {
           this.$Message.error('添加失败')
         }
+        this.$router.push('/home/myAddress')
       })
     }
   },

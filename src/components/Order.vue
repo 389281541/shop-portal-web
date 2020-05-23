@@ -19,7 +19,8 @@
               <li :class="{'cur':index === selectedAddressIndex}" v-for="(item, index) in confirmOrder.customerAddressList" :key="index">
                 <input type='radio' name='address' @click="handleChangeAddress(index)" :checked='index === selectedAddressIndex'/>{{item.receiverName}}&nbsp;&nbsp;{{item.province}}&nbsp;&nbsp;{{item.city}}&nbsp;&nbsp;{{item.district}}&nbsp;&nbsp;{{item.address}}&nbsp;&nbsp;{{item.phone}}
               </li>
-              <a href='javascript:void(0);' class='confirm_btn' @click="confirmAddress()"><span>确认收货地址</span></a>
+              <a href='javascript:void(0);' class='confirm_btn' @click="confirmAddress()" v-show="confirmOrder.customerAddressList.length!==0"><span>确认收货地址</span></a>
+              <a href='javascript:void(0);' class='confirm_btn' @click="goToAddress()" v-show="confirmOrder.customerAddressList.length===0"><span>添加收货地址</span></a>
             </ul>
           </div>
         </div>
@@ -248,6 +249,9 @@ export default {
           this.$router.push({path: '/'})
         })
       }
+    },
+    goToAddress () {
+      this.$router.push({path: '/home/addAddress'})
     },
     modifyAddress () {
       this.isAddressModify = false
