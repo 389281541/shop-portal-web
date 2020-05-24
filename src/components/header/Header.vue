@@ -17,7 +17,7 @@
         <li v-show="!!userInfo.name">
           <Dropdown>
             <p class="username-p">
-              <Avatar class="person-icon" :src="customerInfo.avatar" size="small" /><span class="username">{{userInfo.name}} </span>
+              <Avatar :src="userInfo.avatar" size="small" /><span class="username">{{userInfo.name}} </span>
             </p>
             <DropdownMenu slot="list">
                 <div class="my-page">

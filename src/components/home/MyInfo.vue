@@ -106,9 +106,9 @@ export default {
           updateCustomer(this.customerInfo).then(response => {
             let res = response.data
             if (res) {
-              return true
+              this.$Message.success('修改成功')
             } else {
-              return false
+              this.$Message.success('修改失败')
             }
           })
         }

@@ -1,7 +1,7 @@
 import md5 from 'js-md5'
 import {loginCustomer, logoutCustomer} from '@/api/customer'
 import {listAdvertise} from '@/api/navigation'
-import {setToken} from '@/utils/auth'
+import {setToken, removeToken} from '@/utils/auth'
 import {fetchFlashThemeList} from '@/api/flash'
 
 // 获取秒杀数据
@@ -692,6 +692,7 @@ export const logout = ({ commit }) => {
     logoutCustomer().then(response => {
       localStorage.removeItem('userInfo')
       commit('SET_USER_LOGIN_INFO', {})
+      removeToken()
       resolve(true)
       return true
     })
